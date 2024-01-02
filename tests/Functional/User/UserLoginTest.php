@@ -4,12 +4,9 @@ namespace App\Tests\Functional\User;
 
 use App\Factory\UserFactory;
 use App\Tests\Functional\Helper\ApiTestCase;
-use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserLoginTest extends ApiTestCase
 {
-    use ResetDatabase;
-
     /** @test */
     public function jwt_token_generation()
     {
