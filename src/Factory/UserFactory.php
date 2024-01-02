@@ -30,11 +30,6 @@ use Zenstruck\Foundry\RepositoryProxy;
  */
 final class UserFactory extends ModelFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
     )
@@ -42,11 +37,6 @@ final class UserFactory extends ModelFactory
         parent::__construct();
     }
 
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
-     */
     protected function getDefaults(): array
     {
         return [
@@ -55,9 +45,6 @@ final class UserFactory extends ModelFactory
         ];
     }
 
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
-     */
     protected function initialize(): self
     {
         return $this
