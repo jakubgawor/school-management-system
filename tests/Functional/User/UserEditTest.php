@@ -13,7 +13,7 @@ class UserEditTest extends ApiTestCase
     use Factories;
 
     /** @test */
-    public function self_user_update_via_patch()
+    public function self_user_update_via_patch_with_unique_email()
     {
         $repository = UserFactory::repository();
         $user = UserFactory::createOne();
@@ -30,6 +30,24 @@ class UserEditTest extends ApiTestCase
             ])
             ->assertStatus(200);
         $this->assertNotEmpty($repository->findOneBy(['email' => 'new_email@example.com']));
+    }
+
+    /** @test */
+    public function self_user_update_via_patch_with_email_already_in_use()
+    {
+        $user = UserFactory::createOne();
+
+        $this->browser()
+            ->actingAs($user)
+            ->patch('/api/users/' . $user->getId(), [
+                'json' => [
+                    'email' => UserFactory::createOne()->getEmail(),
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json'
+                ]
+            ])
+            ->assertStatus(422);
     }
 
     /** @test */
