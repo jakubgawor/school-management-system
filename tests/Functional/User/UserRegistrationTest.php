@@ -42,4 +42,18 @@ class UserRegistrationTest extends ApiTestCase
         $this->assertNotEmpty($repository->findOneBy(['email' => 'email@example.com']));
     }
 
+    /** @test */
+    public function user_creation_when_email_is_already_in_use()
+    {
+        $user = UserFactory::createOne();
+
+        $this->browser()
+            ->post('/api/users', [
+                'json' => [
+                    'email' => $user->getEmail(),
+                    'password' => 'password',
+                ],
+            ])
+            ->assertStatus(422);
+    }
 }
