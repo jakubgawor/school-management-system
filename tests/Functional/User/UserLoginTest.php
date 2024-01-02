@@ -4,11 +4,16 @@ namespace App\Tests\Functional\User;
 
 use App\Factory\UserFactory;
 use App\Tests\Functional\Helper\ApiTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserLoginTest extends ApiTestCase
 {
+    use ResetDatabase;
+    use Factories;
+
     /** @test */
-    public function jwt_token_generation()
+    public function jwt_token_generation_with_valid_credentials()
     {
         $user = UserFactory::createOne();
 
@@ -21,6 +26,19 @@ class UserLoginTest extends ApiTestCase
             ])
             ->assertStatus(200)
             ->assertContains('token');
+    }
+
+    /** @test */
+    public function jwt_token_generation_with_invalid_credentials()
+    {
+        $this->browser()
+            ->post('/api/login_check', [
+                'json' => [
+                    'email' => 'invalid_email@email.com',
+                    'password' => 'pass',
+                ],
+            ])
+            ->assertStatus(401);
     }
 
     /** @test */
@@ -44,6 +62,6 @@ class UserLoginTest extends ApiTestCase
                     'Authorization' => 'Bearer ' . $jwtToken,
                 ],
             ])
-            ->assertAuthenticated();
+            ->assertAuthenticated($user);
     }
 }
