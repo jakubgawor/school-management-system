@@ -3,15 +3,19 @@
 namespace App\Tests\Functional\User;
 
 use App\Factory\UserFactory;
+use App\Message\VerifyMailNotification;
 use App\Tests\Functional\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Messenger\Test\InteractsWithMessenger;
 
 class UserRegistrationTest extends ApiTestCase
 {
     use ResetDatabase;
     use Factories;
+
+    use InteractsWithMessenger;
 
     /** @test */
     public function user_creation_with_post_request()
@@ -40,6 +44,9 @@ class UserRegistrationTest extends ApiTestCase
             ->assertContains('token');
 
         $this->assertNotEmpty($repository->findOneBy(['email' => 'email@example.com']));
+
+        $this->transport('async')->queue()->assertCount(1);
+        $this->transport('async')->queue()->assertContains(VerifyMailNotification::class);
     }
 
     /** @test */
