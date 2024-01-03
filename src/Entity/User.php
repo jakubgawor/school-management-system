@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,9 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserVerificationToken::class, orphanRemoval: true)]
+    private Collection $verificationEmailToken;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->verificationEmailToken = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -131,6 +137,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserVerificationToken>
+     */
+    public function getVerificationEmailToken(): Collection
+    {
+        return $this->verificationEmailToken;
+    }
+
+    public function addVerificationEmailToken(UserVerificationToken $verificationEmailToken): static
+    {
+        if (!$this->verificationEmailToken->contains($verificationEmailToken)) {
+            $this->verificationEmailToken->add($verificationEmailToken);
+            $verificationEmailToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVerificationEmailToken(UserVerificationToken $verificationEmailToken): static
+    {
+        if ($this->verificationEmailToken->removeElement($verificationEmailToken)) {
+            // set the owning side to null (unless already changed)
+            if ($verificationEmailToken->getUser() === $this) {
+                $verificationEmailToken->setUser(null);
+            }
+        }
 
         return $this;
     }
