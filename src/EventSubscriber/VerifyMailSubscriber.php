@@ -4,17 +4,18 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\ApiResource\UserApi;
+use App\Service\MailerService;
+use App\Service\TokenService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 final class VerifyMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private MailerInterface $mailer,
+        private TokenService   $tokenService,
+        private MailerService  $mailerService,
     )
     {
     }
@@ -35,14 +36,8 @@ final class VerifyMailSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $message = (new Email())
-            ->from('sub@example.com')
-            ->to('sub@example.com')
-            ->subject('sub')
-            ->text('sub');
+        $verificationToken = $this->tokenService->createToken($user);
 
-        $this->mailer->send($message);
-
-
+        $this->mailerService->sendVerificationMail($verificationToken);
     }
 }
