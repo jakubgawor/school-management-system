@@ -1,24 +1,28 @@
 framework:
-    messenger:
-        failure_transport: failed
+  messenger:
+    failure_transport: failed
 
-        transports:
-             async:
-                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                 retry_strategy:
-                     max_retries: 3
-                     multiplier: 2
+    transports:
+      # https://symfony.com/doc/current/messenger.html#transport-configuration
+      async:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        options:
+          use_notify: true
+          check_delayed_interval: 60000
+        retry_strategy:
+          max_retries: 3
+          multiplier: 2
+      failed: 'doctrine://default?queue_name=failed'
+      # sync: 'sync://'
 
-             failed: 'doctrine://default?queue_name=failed'
-
-        routing:
-            # Route your messages to the transports
-             'App\Message\VerifyMailNotification': async
+    routing:
+      # Route your messages to the transports
+      'App\Message\VerifyMailNotification': async
 
 when@test:
-   framework:
-       messenger:
-           transports:
-               # replace with your transport name here (e.g., my_transport: 'in-memory://')
-               # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
-               async: 'in-memory://'
+  framework:
+    messenger:
+      transports:
+        # replace with your transport name here (e.g., my_transport: 'in-memory://')
+        # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+        async: 'test://'
