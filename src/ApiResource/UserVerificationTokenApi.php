@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use App\State\EntityToDtoStateProvider;
 use App\State\UserVerificationTokenStateProcessor;
+use App\Validator\VerificationToken;
 
 #[ApiResource(
     uriTemplate: '/account/confirm.{_format}',
@@ -18,6 +19,7 @@ use App\State\UserVerificationTokenStateProcessor;
 )]
 class UserVerificationTokenApi
 {
+    #[VerificationToken]
     private ?string $token = null;
 
     public function getToken(): ?string
