@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Post;
 use App\Entity\User;
 use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityToDtoStateProvider;
+use App\Validator\UniqueEmail;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -24,13 +25,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(),
         new Post(
             security: 'is_granted("PUBLIC_ACCESS")',
-            validationContext: ['groups' => ['Default', 'postValidation']]
+            validationContext: ['groups' => ['Default', 'postValidation']],
         ),
         new Patch(
-            security: 'is_granted("PATCH", object)'
+            security: 'is_granted("PATCH", object)',
         ),
         new Delete(
-            security: 'is_granted("DELETE", object)'
+            security: 'is_granted("DELETE", object)',
         ),
     ],
     paginationItemsPerPage: 10,
@@ -46,6 +47,7 @@ class UserApi
 
     #[NotBlank]
     #[Email]
+    #[UniqueEmail]
     public ?string $email = null;
 
     #[NotBlank(groups: ['postValidation'])]
