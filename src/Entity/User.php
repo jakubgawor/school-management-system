@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -38,13 +36,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserVerificationToken::class, orphanRemoval: true)]
-    private Collection $verificationEmailToken;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?UserVerificationToken $userVerificationToken = null;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->verificationEmailToken = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -141,33 +138,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserVerificationToken>
-     */
-    public function getVerificationEmailToken(): Collection
+    public function getUserVerificationToken(): ?UserVerificationToken
     {
-        return $this->verificationEmailToken;
+        return $this->userVerificationToken;
     }
 
-    public function addVerificationEmailToken(UserVerificationToken $verificationEmailToken): static
+    public function setUserVerificationToken(UserVerificationToken $userVerificationToken): static
     {
-        if (!$this->verificationEmailToken->contains($verificationEmailToken)) {
-            $this->verificationEmailToken->add($verificationEmailToken);
-            $verificationEmailToken->setUser($this);
+        // set the owning side of the relation if necessary
+        if ($userVerificationToken->getUser() !== $this) {
+            $userVerificationToken->setUser($this);
         }
+
+        $this->userVerificationToken = $userVerificationToken;
 
         return $this;
     }
 
-    public function removeVerificationEmailToken(UserVerificationToken $verificationEmailToken): static
-    {
-        if ($this->verificationEmailToken->removeElement($verificationEmailToken)) {
-            // set the owning side to null (unless already changed)
-            if ($verificationEmailToken->getUser() === $this) {
-                $verificationEmailToken->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 }

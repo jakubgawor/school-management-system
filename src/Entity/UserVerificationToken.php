@@ -13,18 +13,18 @@ class UserVerificationToken
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 64)]
     private ?string $token = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $expiresAt = null;
 
-    #[ORM\Column]
-    private ?bool $isUsed = false;
-
-    #[ORM\ManyToOne(inversedBy: 'verificationEmailToken')]
+    #[ORM\OneToOne(inversedBy: 'userVerificationToken', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\Column]
+    private ?bool $isUsed = false;
 
     public function getId(): ?int
     {
@@ -55,6 +55,18 @@ class UserVerificationToken
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function isUsed(): ?bool
     {
         return $this->isUsed;
@@ -63,18 +75,6 @@ class UserVerificationToken
     public function setIsUsed(bool $isUsed): static
     {
         $this->isUsed = $isUsed;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
 
         return $this;
     }
