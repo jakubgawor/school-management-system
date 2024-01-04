@@ -52,4 +52,17 @@ class UserRegistrationTest extends ApiTestCase
             ])
             ->assertStatus(422);
     }
+
+    /** @test */
+    public function user_creation_with_blank_data()
+    {
+        $this->browser()
+            ->post('/api/users', [
+                'json' => [
+                    'email' => '',
+                    'password' => '',
+                ],
+            ])
+            ->assertStatus(422);
+    }
 }
