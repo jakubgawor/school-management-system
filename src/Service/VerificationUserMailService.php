@@ -9,24 +9,23 @@ class VerificationUserMailService
 {
     public function __construct(
         private EntityManagerInterface          $entityManager,
-        private UserVerificationTokenRepository $tokenRepository,
+        private UserVerificationTokenRepository $userVerificationTokenRepository,
+        private TokenService                    $tokenService,
     )
     {
     }
 
     public function verifyUser(string $token): void
     {
-        $verificationToken = $this->tokenRepository->findOneBy(['token' => $token]);
+        $verificationToken = $this->userVerificationTokenRepository->findOneBy(['token' => $token]);
 
         $user = $verificationToken->getUser();
         $user->setIsVerified(true);
         $user->setRoles(['ROLE_USER_EMAIL_VERIFIED']);
 
-        $verificationToken->setIsUsed(true);
-
         $this->entityManager->persist($user);
-        $this->entityManager->persist($verificationToken);
-
         $this->entityManager->flush();
+
+        $this->tokenService->removeToken($token);
     }
 }

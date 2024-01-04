@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\ApiResource\UserApi;
+use App\Entity\User;
 use App\Entity\UserVerificationToken;
 use App\Repository\UserRepository;
 use App\Repository\UserVerificationTokenRepository;
@@ -22,24 +23,38 @@ class TokenService
     {
         $userEntity = $this->userRepository->findOneBy(['id' => $userApi->id]);
 
-        $token = bin2hex(random_bytes(32));
-        if($this->userVerificationTokenRepository->findOneBy(['token' => $token])) {
-            throw new \LogicException('Token is already created');
+        if(!$userEntity) {
+            throw new \LogicException('User not found');
         }
 
+        $existingToken = $this->userVerificationTokenRepository->findOneBy(['user' => $userEntity]);
+        if($existingToken) {
+            $this->removeToken($existingToken->getToken());
+        }
+
+        $token = bin2hex(random_bytes(32));
+
+        $this->saveToken($token, $userEntity);
+
+        return $token;
+    }
+
+    public function saveToken(string $token, User $userEntity)
+    {
         $verificationToken = new UserVerificationToken();
         $verificationToken->setToken($token);
         $verificationToken->setUser($userEntity);
-        $verificationToken->setExpiresAt(new \DateTimeImmutable('+15 minutes'));
 
-        $this->saveToken($verificationToken);
-
-        return $verificationToken->getToken();
-    }
-
-    private function saveToken(UserVerificationToken $verificationToken): void
-    {
         $this->entityManager->persist($verificationToken);
         $this->entityManager->flush();
     }
+
+    public function removeToken(string $token): void
+    {
+        $verificationToken = $this->userVerificationTokenRepository->findOneBy(['token' => $token]);
+
+        $this->entityManager->remove($verificationToken);
+        $this->entityManager->flush();
+    }
+
 }

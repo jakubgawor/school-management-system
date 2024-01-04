@@ -18,16 +18,17 @@ class VerificationTokenValidator extends ConstraintValidator
     {
         $token = $this->tokenRepository->findOneBy(['token' => $value]);
 
-        if (!$token) {
-            throw new \LogicException('Token does not exists');
-        }
-
         if (null === $value || '' === $value) {
             return;
         }
 
-        if ($token->isUsed()) {
-            $this->context->buildViolation($constraint->usedMessage)
+        if (!$token) {
+            $this->context->buildViolation($constraint->tokenDoesNotExists)
+                ->addViolation();
+        }
+
+        if ($token->getUser()->isVerified()) {
+            $this->context->buildViolation($constraint->verifiedUser)
                 ->addViolation();
         }
 

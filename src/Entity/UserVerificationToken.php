@@ -17,14 +17,16 @@ class UserVerificationToken
     private ?string $token = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $expiresAt = null;
+    private ?\DateTimeImmutable $expiresAt;
 
-    #[ORM\OneToOne(inversedBy: 'userVerificationToken', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'userVerificationToken')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column]
-    private ?bool $isUsed = false;
+    public function __construct()
+    {
+        $this->expiresAt = new \DateTimeImmutable('+15 minutes');
+    }
 
     public function getId(): ?int
     {
@@ -63,18 +65,6 @@ class UserVerificationToken
     public function setUser(User $user): static
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function isUsed(): ?bool
-    {
-        return $this->isUsed;
-    }
-
-    public function setIsUsed(bool $isUsed): static
-    {
-        $this->isUsed = $isUsed;
 
         return $this;
     }
