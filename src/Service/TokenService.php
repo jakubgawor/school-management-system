@@ -44,8 +44,10 @@ class TokenService
         $verificationToken = new UserVerificationToken();
         $verificationToken->setToken($token);
         $verificationToken->setUser($userEntity);
+        $userEntity->setUserVerificationToken($verificationToken);
 
         $this->entityManager->persist($verificationToken);
+        $this->entityManager->persist($userEntity);
         $this->entityManager->flush();
     }
 
