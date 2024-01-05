@@ -23,7 +23,7 @@ class VerificationTokenValidator extends ConstraintValidator
         }
 
         if (!$token) {
-            $this->context->buildViolation($constraint->verifiedUser)
+            $this->context->buildViolation($constraint->tokenDoesNotExists)
                 ->addViolation();
 
             return;
