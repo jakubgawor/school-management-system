@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Post;
 use App\State\EntityToDtoStateProvider;
 use App\State\UserVerificationTokenStateProcessor;
 use App\Validator\VerificationToken;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(
     uriTemplate: '/account/confirm.{_format}',
@@ -20,6 +21,7 @@ use App\Validator\VerificationToken;
 class UserVerificationTokenApi
 {
     #[VerificationToken]
+    #[NotBlank]
     private ?string $token = null;
 
     public function getToken(): ?string
