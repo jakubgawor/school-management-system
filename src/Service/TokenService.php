@@ -21,7 +21,7 @@ class TokenService
 
     public function createToken(UserApi $userApi): string
     {
-        $userEntity = $this->userRepository->findOneBy(['id' => $userApi->id]);
+        $userEntity = $this->userRepository->findOneBy(['id' => $userApi->getId()]);
 
         if(!$userEntity) {
             throw new \LogicException('User not found');

@@ -43,14 +43,45 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class UserApi
 {
     #[ApiProperty(readable: false, writable: false, identifier: true)]
-    public ?Uuid $id = null;
+    private ?Uuid $id = null;
 
     #[NotBlank]
     #[Email]
     #[UniqueEmail]
-    public ?string $email = null;
+    private ?string $email = null;
 
     #[NotBlank(groups: ['postValidation'])]
     #[ApiProperty(readable: false)]
-    public ?string $password = null;
+    private ?string $password = null;
+
+    public function getId(): ?Uuid
+    {
+        return $this->id;
+    }
+
+    public function setId(?Uuid $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): void
+    {
+        $this->password = $password;
+    }
+
 }

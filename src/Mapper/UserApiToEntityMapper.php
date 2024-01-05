@@ -24,7 +24,7 @@ class UserApiToEntityMapper implements MapperInterface
         $dto = $from;
         assert($dto instanceof UserApi);
 
-        $userEntity = $dto->id ? $this->userRepository->find($dto->id) : new User();
+        $userEntity = $dto->getId() ? $this->userRepository->find($dto->getId()) : new User();
 
         if (!$userEntity) {
             throw new \Exception('User not found.');
@@ -42,9 +42,9 @@ class UserApiToEntityMapper implements MapperInterface
         assert($entity instanceof User);
 
 
-        $entity->setEmail($dto->email);
-        if ($dto->password) {
-            $entity->setPassword($this->userPasswordHasher->hashPassword($entity, $dto->password));
+        $entity->setEmail($dto->getEmail());
+        if ($dto->getPassword()) {
+            $entity->setPassword($this->userPasswordHasher->hashPassword($entity, $dto->getPassword()));
         }
 
         return $entity;

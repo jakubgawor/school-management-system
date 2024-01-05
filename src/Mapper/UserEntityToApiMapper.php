@@ -16,7 +16,7 @@ class UserEntityToApiMapper implements MapperInterface
         assert($entity instanceof User);
 
         $dto = new UserApi();
-        $dto->id = $entity->getId();
+        $dto->setId($entity->getId());
 
         return $dto;
     }
@@ -28,8 +28,8 @@ class UserEntityToApiMapper implements MapperInterface
         assert($entity instanceof User);
         assert($dto instanceof UserApi);
 
-        $dto->id = $entity->getId();
-        $dto->email = $entity->getEmail();
+        $dto->setId($entity->getId());
+        $dto->setEmail($entity->getEmail());
 
         return $dto;
     }

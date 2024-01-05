@@ -37,7 +37,7 @@ class EntityClassDtoStateProcessor implements ProcessorInterface
         }
 
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
-        $data->id = $entity->getId();
+        $data->setId($entity->getId());
 
         return $data;
     }

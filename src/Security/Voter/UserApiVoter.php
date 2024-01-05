@@ -42,7 +42,7 @@ class UserApiVoter extends Voter
         switch ($attribute) {
             case self::DELETE:
             case self::PATCH:
-                if ($subject->id === $user->getId()) {
+                if ($subject->getId() === $user->getId()) {
                     return true;
                 }
         }
