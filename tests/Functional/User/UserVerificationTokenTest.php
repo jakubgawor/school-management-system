@@ -54,4 +54,16 @@ class UserVerificationTokenTest extends ApiTestCase
             ->assertStatus(422);
     }
 
+    /** @test */
+    public function null_token_provided()
+    {
+        $this->browser()
+            ->post('/api/account/confirm', [
+                'json' => [
+                    'token' => '',
+                ]
+            ])
+            ->assertStatus(422);
+    }
+
 }
