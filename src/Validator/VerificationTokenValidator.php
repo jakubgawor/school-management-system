@@ -29,11 +29,6 @@ class VerificationTokenValidator extends ConstraintValidator
             return;
         }
 
-        if ($token->getUser()->isVerified()) {
-            $this->context->buildViolation($constraint->verifiedUser)
-                ->addViolation();
-        }
-
         if ($token->getExpiresAt() < new \DateTimeImmutable()) {
             $this->context->buildViolation($constraint->expiredMessage)
                 ->addViolation();

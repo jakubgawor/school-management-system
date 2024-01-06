@@ -3,7 +3,7 @@
 namespace App\Tests\Integration;
 
 use App\Factory\UserFactory;
-use App\Message\VerifyMailNotification;
+use App\Message\TokenNotification;
 use App\Tests\Functional\Helper\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -39,7 +39,7 @@ class UserTest extends ApiTestCase
 
         $token = $repository->findOneBy(['email' => 'email@example.com'])->getUserVerificationToken()->getToken();
 
-        $this->transport('async')->queue()->assertContains(VerifyMailNotification::class, 1);
+        $this->transport('async')->queue()->assertContains(TokenNotification::class, 1);
         $this->assertSame(
             $token,
             $this->transport('async')->dispatched()->messages()[0]->getContent()

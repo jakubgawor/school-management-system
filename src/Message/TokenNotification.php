@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-class VerifyMailNotification
+class TokenNotification
 {
     public function __construct(
         private string $content

@@ -17,7 +17,7 @@ framework:
 
     routing:
       # Route your messages to the transports
-      'App\Message\VerifyMailNotification': async
+      'App\Message\TokenNotification': async
 
 when@test:
   framework:

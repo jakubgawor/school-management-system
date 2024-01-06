@@ -2,13 +2,13 @@
 
 namespace App\MessageHandler;
 
-use App\Message\VerifyMailNotification;
+use App\Message\TokenNotification;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Email;
 
 #[AsMessageHandler]
-class VerifyMailNotificationHandler
+class TokenNotificationHandler
 {
     public function __construct(
         private MailerInterface $mailer,
@@ -16,7 +16,7 @@ class VerifyMailNotificationHandler
     {
     }
 
-    public function __invoke(VerifyMailNotification $verifyMailNotification)
+    public function __invoke(TokenNotification $verifyMailNotification)
     {
         $message = (new Email())
             ->from('sub@example.com')
