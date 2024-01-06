@@ -15,8 +15,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     operations: [
         new Post()
     ],
+    security: 'is_granted("ROLE_USER")',
     provider: EntityToDtoStateProvider::class,
-    processor: UserVerificationTokenStateProcessor::class
+    processor: UserVerificationTokenStateProcessor::class,
 )]
 class UserVerificationTokenApi
 {
