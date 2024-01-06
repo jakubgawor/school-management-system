@@ -4,19 +4,18 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\ApiResource\UserApi;
-use App\Message\VerifyMailNotification;
+use App\Service\TokenNotificationService;
 use App\Service\TokenService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 final class VerifyMailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private TokenService        $tokenService,
-        private MessageBusInterface $bus,
+        private TokenService             $tokenService,
+        private TokenNotificationService $tokenNotificationService,
     )
     {
     }
@@ -37,8 +36,8 @@ final class VerifyMailSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $verificationToken = $this->tokenService->createToken($user);
+        $verificationToken = $this->tokenService->createToken($user->getId());
 
-        $this->bus->dispatch(new VerifyMailNotification($verificationToken));
+        $this->tokenNotificationService->sendTokenNotification($verificationToken);
     }
 }
