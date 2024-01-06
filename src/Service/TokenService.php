@@ -53,14 +53,14 @@ class TokenService
 
     public function removeToken(string $token): void
     {
-        $verificationToken = $this->userVerificationTokenRepository->findOneBy(['token' => $token]);
+        $verificationToken = $this->userVerificationTokenRepository->findOneByToken($token);
 
         $this->entityManager->remove($verificationToken);
         $this->entityManager->flush();
     }
 
-    public function getUserVerificationTokenEntity($token): UserVerificationToken
+    public function getUserVerificationTokenEntity(string $token): UserVerificationToken
     {
-        return $this->userVerificationTokenRepository->findOneBy(['token' => $token]);
+        return $this->userVerificationTokenRepository->findOneByToken($token);
     }
 }

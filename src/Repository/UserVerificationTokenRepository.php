@@ -21,6 +21,15 @@ class UserVerificationTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, UserVerificationToken::class);
     }
 
+    public function findOneByToken(string $token): ?UserVerificationToken
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.token = :token')
+            ->setParameter('token', $token)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return UserVerificationToken[] Returns an array of UserVerificationToken objects
 //     */

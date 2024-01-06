@@ -17,7 +17,7 @@ class VerificationUserMailService
 
     public function verifyUser(string $token): void
     {
-        $verificationToken = $this->userVerificationTokenRepository->findOneBy(['token' => $token]);
+        $verificationToken = $this->userVerificationTokenRepository->findOneByToken($token);
 
         $user = $verificationToken->getUser();
         $user->setIsVerified(true);

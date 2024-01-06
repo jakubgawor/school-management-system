@@ -15,6 +15,6 @@ class UserService
 
     public function findUserByEmail(string $email): ?User
     {
-        return $this->userRepository->findOneBy(['email' => $email]);
+        return $this->userRepository->findOneByEmail($email);
     }
 }
