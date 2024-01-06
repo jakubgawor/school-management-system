@@ -45,6 +45,7 @@ class UserVerificationTest extends ApiTestCase
         $this->assertSame($tokenRepository->findOneBy(['token' => $verificationToken])->getToken(), $verificationToken);
 
         $this->browser()
+            ->actingAs($user)
             ->post('/api/account/confirm', [
                 'json' => [
                     'token' => $verificationToken,

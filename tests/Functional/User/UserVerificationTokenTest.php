@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional\User;
 
+use App\Factory\UserFactory;
 use App\Factory\UserVerificationTokenFactory;
 use App\Tests\Functional\Helper\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -18,6 +19,7 @@ class UserVerificationTokenTest extends ApiTestCase
         $token = UserVerificationTokenFactory::createOne();
 
         $this->browser()
+            ->actingAs($token->getUser())
             ->post('/api/account/confirm', [
                 'json' => [
                     'token' => $token->getToken(),
@@ -30,6 +32,7 @@ class UserVerificationTokenTest extends ApiTestCase
     public function not_existing_token()
     {
         $this->browser()
+            ->actingAs(UserFactory::createOne())
             ->post('/api/account/confirm', [
                 'json' => [
                     'token' => 'token',
@@ -46,6 +49,7 @@ class UserVerificationTokenTest extends ApiTestCase
         ]);
 
         $this->browser()
+            ->actingAs(UserFactory::createOne())
             ->post('/api/account/confirm', [
                 'json' => [
                     'token' => $token->getToken(),
@@ -58,6 +62,7 @@ class UserVerificationTokenTest extends ApiTestCase
     public function null_token_provided()
     {
         $this->browser()
+            ->actingAs(UserFactory::createOne())
             ->post('/api/account/confirm', [
                 'json' => [
                     'token' => '',
