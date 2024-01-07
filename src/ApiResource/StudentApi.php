@@ -13,10 +13,8 @@ use App\Entity\Student;
 use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityToDtoStateProvider;
 use App\Validator\StudentData;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-// todo teacher security
 #[ApiResource(
     shortName: 'Student',
     operations: [
@@ -25,6 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Post(),
         new Delete(),
     ],
+    security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")',
     provider: EntityToDtoStateProvider::class,
     processor: EntityClassDtoStateProcessor::class,
     stateOptions: new Options(Student::class),
@@ -35,11 +34,9 @@ class StudentApi
     private ?int $id = null;
 
     #[NotBlank]
-    #[Groups(['patch_student'])]
     private ?string $firstName = null;
 
     #[NotBlank]
-    #[Groups(['patch_student'])]
     private ?string $lastName = null;
 
     #[StudentData]
