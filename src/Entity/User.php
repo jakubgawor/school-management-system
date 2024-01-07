@@ -39,6 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserVerificationToken $userVerificationToken = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Student $student = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -151,6 +154,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->userVerificationToken = $userVerificationToken;
+
+        return $this;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(Student $student): static
+    {
+        // set the owning side of the relation if necessary
+        if ($student->getUser() !== $this) {
+            $student->setUser($this);
+        }
+
+        $this->student = $student;
 
         return $this;
     }
