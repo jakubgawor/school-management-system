@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 class EntityToDtoStateProvider implements ProviderInterface
@@ -45,6 +46,10 @@ class EntityToDtoStateProvider implements ProviderInterface
         }
 
         $entity = $this->itemProvider->provide($operation, $uriVariables, $context);
+
+        if(!$entity) {
+            throw new NotFoundHttpException('Resource not found');
+        }
 
         return $this->mapEntityToDto($entity, $resourceClass);
 
