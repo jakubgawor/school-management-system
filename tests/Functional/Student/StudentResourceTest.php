@@ -20,6 +20,7 @@ class StudentResourceTest extends ApiTestCase
         StudentFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->get('/api/students')
             ->assertStatus(200)
             ->assertJsonMatches('"hydra:totalItems"', 1)
@@ -40,6 +41,7 @@ class StudentResourceTest extends ApiTestCase
         $student = StudentFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->get('/api/students/' . $student->getId())
             ->assertStatus(200)
             ->assertJsonMatches('firstName', $student->getFirstName())
@@ -51,6 +53,7 @@ class StudentResourceTest extends ApiTestCase
     public function not_existing_student()
     {
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->get('/api/students/43')
             ->assertStatus(404);
     }
@@ -62,6 +65,7 @@ class StudentResourceTest extends ApiTestCase
         $studentRepository = StudentFactory::repository();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->post('/api/students', [
                 'json' => [
                     'firstName' => 'John',
@@ -82,6 +86,7 @@ class StudentResourceTest extends ApiTestCase
         $studentId = $student->getId();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->delete('/api/students/' . $studentId)
             ->assertStatus(204);
 
@@ -92,6 +97,7 @@ class StudentResourceTest extends ApiTestCase
     public function deletion_not_existing_student()
     {
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->delete('/api/students/949')
             ->assertStatus(404);
     }
