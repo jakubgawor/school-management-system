@@ -42,6 +42,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Student $student = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Teacher $teacher = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -171,6 +174,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->student = $student;
+
+        return $this;
+    }
+
+    public function getTeacher(): ?Teacher
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?Teacher $teacher): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($teacher === null && $this->teacher !== null) {
+            $this->teacher->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($teacher !== null && $teacher->getUser() !== $this) {
+            $teacher->setUser($this);
+        }
+
+        $this->teacher = $teacher;
 
         return $this;
     }
