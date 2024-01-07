@@ -78,6 +78,24 @@ class StudentResourceTest extends ApiTestCase
     }
 
     /** @test */
+    public function post_is_setting_student_role()
+    {
+        $user = UserFactory::createOne();
+
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->post('/api/students', [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Struck',
+                    'user' => '/api/users/' . $user->getId(),
+                ]
+            ])->assertStatus(201);
+
+        $this->assertTrue(in_array('ROLE_STUDENT', $user->getRoles()));
+    }
+
+    /** @test */
     public function deletion_student()
     {
         $student = StudentFactory::createOne();

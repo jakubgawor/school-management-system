@@ -46,6 +46,7 @@ class StudentApiToEntityMapper implements MapperInterface
         $entity->setUser($this->microMapper->map($dto->getUser(), User::class, [
             MicroMapperInterface::MAX_DEPTH => 0,
         ]));
+        $entity->getUser()->setRoles(['ROLE_STUDENT']);
 
         return $entity;
     }
