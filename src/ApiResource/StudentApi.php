@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\Post;
 use App\Entity\Student;
 use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityToDtoStateProvider;
-use App\Validator\StudentData;
+use App\Validator\UserRole;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(
@@ -39,7 +39,7 @@ class StudentApi
     #[NotBlank]
     private ?string $lastName = null;
 
-    #[StudentData]
+    #[UserRole]
     #[NotBlank]
     private ?UserApi $user = null;
 

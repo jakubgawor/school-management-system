@@ -7,7 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class StudentDataValidator extends ConstraintValidator
+class UserRoleValidator extends ConstraintValidator
 {
     public function __construct(
         private UserRepository $userRepository,
@@ -27,10 +27,12 @@ class StudentDataValidator extends ConstraintValidator
             return;
         }
 
-        if ($user->getStudent()) {
-            $this->context->buildViolation($constraint->alreadyStudent)
+        if ($user->getStudent() || $user->getTeacher()) {
+            $this->context->buildViolation($constraint->alreadyRole)
                 ->addViolation();
         }
+
+
 
     }
 }
