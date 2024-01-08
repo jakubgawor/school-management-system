@@ -20,7 +20,7 @@ final class VerifyMailSubscriber implements EventSubscriberInterface
     {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::VIEW => ['sendVerificationMail', EventPriorities::POST_WRITE]

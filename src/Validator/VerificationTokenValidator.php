@@ -14,7 +14,7 @@ class VerificationTokenValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         $token = $this->tokenRepository->findOneBy(['token' => $value]);
 

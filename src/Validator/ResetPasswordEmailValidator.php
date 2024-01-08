@@ -14,7 +14,7 @@ class ResetPasswordEmailValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         $user = $this->userRepository->findOneBy(['email' => $value]);
 
