@@ -99,7 +99,6 @@ class StudentResourceTest extends ApiTestCase
     public function patch_to_edit_student()
     {
         $student = StudentFactory::createOne();
-        $studentRepository = StudentFactory::repository();
 
         $studentId = $student->getId();
 
@@ -114,10 +113,10 @@ class StudentResourceTest extends ApiTestCase
                     'Content-Type' => 'application/merge-patch+json',
                 ]
             ])
-            ->assertStatus(200);
-
-        $foundInDatabaseStudent = $studentRepository->findOneBy(['id' => $student->getId()]);
-        $this->assertSame('John', $foundInDatabaseStudent->getFirstName());
+            ->assertStatus(200)
+            ->assertJsonMatches('firstName', 'John')
+            ->assertJsonMatches('lastName', 'Doe')
+            ->assertJsonMatches('user', '/api/users/' . $student->getUser()->getId());
 
     }
 
