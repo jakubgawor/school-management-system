@@ -9,7 +9,7 @@ use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class StudentResourceTest extends ApiTestCase
+class StudentRoleTest extends ApiTestCase
 {
     use ResetDatabase;
     use Factories;
@@ -59,7 +59,7 @@ class StudentResourceTest extends ApiTestCase
     }
 
     /** @test */
-    public function post_is_saving_student_in_database()
+    public function post_with_valid_credentials_is_saving_student_to_the_database()
     {
         $user = UserFactory::createOne();
         $studentRepository = StudentFactory::repository();
@@ -78,7 +78,7 @@ class StudentResourceTest extends ApiTestCase
     }
 
     /** @test */
-    public function post_is_setting_student_role()
+    public function post_with_valid_credentials_is_setting_student_role()
     {
         $user = UserFactory::createOne();
 
@@ -93,6 +93,49 @@ class StudentResourceTest extends ApiTestCase
             ])->assertStatus(201);
 
         $this->assertTrue(in_array('ROLE_STUDENT', $user->getRoles()));
+    }
+
+    /** @test */
+    public function post_not_existing_user()
+    {
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->post('/api/students', [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Struck',
+                    'user' => '/api/users/fb631912-4e87-4bbc-acfe-b093b35119a7',
+                ]
+            ])->assertStatus(404);
+    }
+
+    /** @test */
+    public function post_without_providing_user()
+    {
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->post('/api/students', [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Struck',
+                ]
+            ])->assertStatus(422);
+    }
+
+    /** @test */
+    public function post_when_user_was_student()
+    {
+        $student = StudentFactory::createOne();
+
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->post('/api/students', [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Struck',
+                    'user' => '/api/users/'.$student->getUser()->getId()
+                ]
+            ])->assertStatus(422);
     }
 
     /** @test */
@@ -117,6 +160,64 @@ class StudentResourceTest extends ApiTestCase
             ->assertJsonMatches('firstName', 'John')
             ->assertJsonMatches('lastName', 'Doe')
             ->assertJsonMatches('user', '/api/users/' . $student->getUser()->getId());
+
+    }
+
+    /** @test */
+    public function patch_user_field_to_override_student()
+    {
+        $student = StudentFactory::createOne();
+        $student2 = StudentFactory::createOne();
+        $studentId = $student->getId();
+
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->patch('/api/students/' . $studentId, [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
+                    'user' => '/api/users/' . $student2->getUser()->getId(),
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json',
+                ]
+            ])->assertStatus(409);
+
+    }
+
+    /** @test */
+    public function patch_not_existing_user_provided()
+    {
+        $student = StudentFactory::createOne();
+
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->patch('/api/students/' . $student->getId(), [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
+                    'user' => '/api/users/fb631912-4e87-4bbc-acfe-b093b35119a7',
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json',
+                ]
+            ])->assertStatus(404);
+
+    }
+
+    /** @test */
+    public function patch_to_not_existing_student()
+    {
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->patch('/api/students/43', [
+                'json' => [
+                    'firstName' => 'John',
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json',
+                ]
+            ])->assertStatus(404);
 
     }
 
