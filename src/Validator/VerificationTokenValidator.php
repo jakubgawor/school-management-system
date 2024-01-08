@@ -18,10 +18,6 @@ class VerificationTokenValidator extends ConstraintValidator
     {
         $token = $this->tokenRepository->findOneBy(['token' => $value]);
 
-        if (null === $value || '' === $value) {
-            return;
-        }
-
         if (!$token) {
             $this->context->buildViolation($constraint->tokenDoesNotExists)
                 ->addViolation();
