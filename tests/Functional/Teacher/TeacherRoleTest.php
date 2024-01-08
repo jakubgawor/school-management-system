@@ -10,7 +10,7 @@ use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class TeacherResourceTest extends ApiTestCase
+class TeacherRoleTest extends ApiTestCase
 {
     use ResetDatabase;
     use Factories;
