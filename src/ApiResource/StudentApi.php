@@ -11,9 +11,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Student;
-use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityToDtoStateProvider;
-use App\Validator\UserRole;
+use App\State\RoleStateProcessor;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(
@@ -27,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
     ],
     security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")',
     provider: EntityToDtoStateProvider::class,
-    processor: EntityClassDtoStateProcessor::class,
+    processor: RoleStateProcessor::class,
     stateOptions: new Options(Student::class),
 )]
 class StudentApi
@@ -41,7 +40,6 @@ class StudentApi
     #[NotBlank]
     private ?string $lastName = null;
 
-    #[UserRole]
     #[NotBlank]
     private ?UserApi $user = null;
 
