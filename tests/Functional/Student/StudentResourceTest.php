@@ -96,6 +96,32 @@ class StudentResourceTest extends ApiTestCase
     }
 
     /** @test */
+    public function patch_to_edit_student()
+    {
+        $student = StudentFactory::createOne();
+        $studentRepository = StudentFactory::repository();
+
+        $studentId = $student->getId();
+
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->patch('/api/students/' . $studentId, [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json',
+                ]
+            ])
+            ->assertStatus(200);
+
+        $foundInDatabaseStudent = $studentRepository->findOneBy(['id' => $student->getId()]);
+        $this->assertSame('John', $foundInDatabaseStudent->getFirstName());
+
+    }
+
+    /** @test */
     public function deletion_student()
     {
         $student = StudentFactory::createOne();
@@ -119,5 +145,5 @@ class StudentResourceTest extends ApiTestCase
             ->delete('/api/students/949')
             ->assertStatus(404);
     }
-    
+
 }

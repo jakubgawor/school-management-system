@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Student;
 use App\State\EntityClassDtoStateProcessor;
@@ -22,6 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(),
         new Post(),
         new Delete(),
+        new Patch(),
     ],
     security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")',
     provider: EntityToDtoStateProvider::class,
