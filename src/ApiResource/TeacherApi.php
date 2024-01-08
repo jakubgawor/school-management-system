@@ -8,11 +8,11 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Teacher;
-use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityToDtoStateProvider;
-use App\Validator\UserRole;
+use App\State\RoleStateProcessor;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(
@@ -22,10 +22,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(),
         new Post(),
         new Delete(),
+        new Patch(),
     ],
     security: 'is_granted("ROLE_ADMIN")',
     provider: EntityToDtoStateProvider::class,
-    processor: EntityClassDtoStateProcessor::class,
+    processor: RoleStateProcessor::class,
     stateOptions: new Options(Teacher::class),
 )]
 class TeacherApi
@@ -39,7 +40,6 @@ class TeacherApi
     #[NotBlank]
     private ?string $lastName = null;
 
-    #[UserRole]
     #[NotBlank]
     private ?UserApi $user = null;
 
