@@ -3,6 +3,7 @@
 namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiProperty;
+use App\ApiResource\SchoolClassApi;
 
 class StudentNameDto
 {
@@ -10,7 +11,11 @@ class StudentNameDto
     private ?int $id = null;
 
     public ?string $firstName = null;
+
     public ?string $lastName = null;
+
+    #[ApiProperty(writable: false)]
+    public ?SchoolClassApi $schoolClass = null;
 
     public function getId(): ?int
     {
