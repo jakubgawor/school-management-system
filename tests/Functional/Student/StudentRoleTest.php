@@ -30,7 +30,6 @@ class StudentRoleTest extends ApiTestCase
                     '@type',
                     'firstName',
                     'lastName',
-                    'user',
                 ]);
             });
     }
@@ -45,8 +44,7 @@ class StudentRoleTest extends ApiTestCase
             ->get('/api/students/' . $student->getId())
             ->assertStatus(200)
             ->assertJsonMatches('firstName', $student->getFirstName())
-            ->assertJsonMatches('lastName', $student->getLastName())
-            ->assertJsonMatches('user', '/api/users/' . $student->getUser()->getId());
+            ->assertJsonMatches('lastName', $student->getLastName());
     }
 
     /** @test */
@@ -158,50 +156,7 @@ class StudentRoleTest extends ApiTestCase
             ])
             ->assertStatus(200)
             ->assertJsonMatches('firstName', 'John')
-            ->assertJsonMatches('lastName', 'Doe')
-            ->assertJsonMatches('user', '/api/users/' . $student->getUser()->getId());
-
-    }
-
-    /** @test */
-    public function patch_user_field_to_override_student()
-    {
-        $student = StudentFactory::createOne();
-        $student2 = StudentFactory::createOne();
-        $studentId = $student->getId();
-
-        $this->browser()
-            ->actingAs(UserFactory::new()->asTeacher()->create())
-            ->patch('/api/students/' . $studentId, [
-                'json' => [
-                    'firstName' => 'John',
-                    'lastName' => 'Doe',
-                    'user' => '/api/users/' . $student2->getUser()->getId(),
-                ],
-                'headers' => [
-                    'Content-Type' => 'application/merge-patch+json',
-                ]
-            ])->assertStatus(409);
-
-    }
-
-    /** @test */
-    public function patch_not_existing_user_provided()
-    {
-        $student = StudentFactory::createOne();
-
-        $this->browser()
-            ->actingAs(UserFactory::new()->asTeacher()->create())
-            ->patch('/api/students/' . $student->getId(), [
-                'json' => [
-                    'firstName' => 'John',
-                    'lastName' => 'Doe',
-                    'user' => '/api/users/fb631912-4e87-4bbc-acfe-b093b35119a7',
-                ],
-                'headers' => [
-                    'Content-Type' => 'application/merge-patch+json',
-                ]
-            ])->assertStatus(404);
+            ->assertJsonMatches('lastName', 'Doe');
 
     }
 

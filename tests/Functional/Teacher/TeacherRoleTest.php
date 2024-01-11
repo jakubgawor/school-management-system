@@ -31,7 +31,6 @@ class TeacherRoleTest extends ApiTestCase
                     '@type',
                     'firstName',
                     'lastName',
-                    'user',
                 ]);
             });
     }
@@ -46,8 +45,7 @@ class TeacherRoleTest extends ApiTestCase
             ->get('/api/teachers/' . $teacher->getId())
             ->assertStatus(200)
             ->assertJsonMatches('firstName', $teacher->getFirstName())
-            ->assertJsonMatches('lastName', $teacher->getLastName())
-            ->assertJsonMatches('user', '/api/users/' . $teacher->getUser()->getId());
+            ->assertJsonMatches('lastName', $teacher->getLastName());
     }
 
     /** @test */
@@ -76,20 +74,6 @@ class TeacherRoleTest extends ApiTestCase
             ])->assertStatus(201);
 
         $this->assertNotNull($teacherRepository->findOneBy(['id' => $user->getTeacher()->getId()]));
-    }
-
-    /** @test */
-    public function post_with_user_field_set_to_user_with_student_role()
-    {
-        $this->browser()
-            ->actingAs(UserFactory::new()->asAdmin()->create())
-            ->post('/api/teachers', [
-                'json' => [
-                    'firstName' => 'John',
-                    'lastName' => 'Struck',
-                    'user' => '/api/users/' . StudentFactory::createOne()->getUser()->getId(),
-                ]
-            ])->assertStatus(422);
     }
 
     /** @test */
@@ -173,73 +157,7 @@ class TeacherRoleTest extends ApiTestCase
             ])
             ->assertStatus(200)
             ->assertJsonMatches('firstName', 'John')
-            ->assertJsonMatches('lastName', 'Doe')
-            ->assertJsonMatches('user', '/api/users/' . $teacher->getUser()->getId());
-
-    }
-
-    /** @test */
-    public function patch_user_field_to_override_teacher()
-    {
-        $teacher = TeacherFactory::createOne();
-        $teacher2 = TeacherFactory::createOne();
-        $teacherId = $teacher->getId();
-
-        $this->browser()
-            ->actingAs(UserFactory::new()->asAdmin()->create())
-            ->patch('/api/teachers/' . $teacherId, [
-                'json' => [
-                    'firstName' => 'John',
-                    'lastName' => 'Doe',
-                    'user' => '/api/users/' . $teacher2->getUser()->getId(),
-                ],
-                'headers' => [
-                    'Content-Type' => 'application/merge-patch+json',
-                ]
-            ])->assertStatus(409);
-
-    }
-
-    /** @test */
-    public function patch_user_field_to_override_student_role()
-    {
-        $teacher = TeacherFactory::createOne();
-        $student = StudentFactory::createOne();
-        $teacherId = $teacher->getId();
-
-        $this->browser()
-            ->actingAs(UserFactory::new()->asAdmin()->create())
-            ->patch('/api/teachers/' . $teacherId, [
-                'json' => [
-                    'firstName' => 'John',
-                    'lastName' => 'Doe',
-                    'user' => '/api/users/' . $student->getUser()->getId(),
-                ],
-                'headers' => [
-                    'Content-Type' => 'application/merge-patch+json',
-                ]
-            ])->assertStatus(409);
-
-    }
-
-    /** @test */
-    public function patch_not_existing_user_provided()
-    {
-        $teacher = TeacherFactory::createOne();
-
-        $this->browser()
-            ->actingAs(UserFactory::new()->asAdmin()->create())
-            ->patch('/api/teachers/' . $teacher->getId(), [
-                'json' => [
-                    'firstName' => 'John',
-                    'lastName' => 'Doe',
-                    'user' => '/api/users/fb631912-4e87-4bbc-acfe-b093b35119a7',
-                ],
-                'headers' => [
-                    'Content-Type' => 'application/merge-patch+json',
-                ]
-            ])->assertStatus(404);
-
+            ->assertJsonMatches('lastName', 'Doe');
     }
 
     /** @test */
