@@ -2,6 +2,7 @@
 
 namespace App\Mapper;
 
+use App\ApiResource\SchoolClassApi;
 use App\ApiResource\StudentApi;
 use App\ApiResource\UserApi;
 use App\Entity\Student;
@@ -41,6 +42,11 @@ class StudentEntityToApiMapper implements MapperInterface
         $dto->setUser($this->microMapper->map($entity->getUser(), UserApi::class, [
             MicroMapperInterface::MAX_DEPTH => 0,
         ]));
+        if ($entity->getSchoolClass()) {
+            $dto->setSchoolClass($this->microMapper->map($entity->getSchoolClass(), SchoolClassApi::class, [
+                MicroMapperInterface::MAX_DEPTH => 0,
+            ]));
+        }
 
         return $dto;
     }
