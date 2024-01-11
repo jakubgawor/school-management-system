@@ -45,22 +45,8 @@ class StudentApi
     #[ApiProperty(readable: false)]
     private ?UserApi $user = null;
 
-    /**
-     * @return UserApi|null
-     */
-    public function getUser(): ?UserApi
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param UserApi|null $user
-     */
-    public function setUser(?UserApi $user): void
-    {
-        $this->user = $user;
-    }
-
+    #[ApiProperty(readable: true, writable: false)]
+    private ?SchoolClassApi $schoolClass = null;
 
     public function getId(): ?int
     {
@@ -93,6 +79,38 @@ class StudentApi
     public function setLastName(?string $lastName): void
     {
         $this->lastName = $lastName;
+    }
+
+    /**
+     * @return UserApi|null
+     */
+    public function getUser(): ?UserApi
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserApi|null $user
+     */
+    public function setUser(?UserApi $user): void
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return SchoolClassApi|null
+     */
+    public function getSchoolClass(): ?SchoolClassApi
+    {
+        return $this->schoolClass;
+    }
+
+    /**
+     * @param SchoolClassApi|null $schoolClass
+     */
+    public function setSchoolClass(?SchoolClassApi $schoolClass): void
+    {
+        $this->schoolClass = $schoolClass;
     }
 
 }
