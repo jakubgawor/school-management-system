@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Dto\TeacherNameDto;
 use App\Entity\Teacher;
 use App\State\EntityToDtoStateProvider;
 use App\State\RoleStateProcessor;
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(),
         new Post(),
         new Delete(),
-        new Patch(),
+        new Patch(input: TeacherNameDto::class),
     ],
     security: 'is_granted("ROLE_ADMIN")',
     provider: EntityToDtoStateProvider::class,
@@ -41,6 +42,7 @@ class TeacherApi
     private ?string $lastName = null;
 
     #[NotBlank]
+    #[ApiProperty(readable: false)]
     private ?UserApi $user = null;
 
     /**
