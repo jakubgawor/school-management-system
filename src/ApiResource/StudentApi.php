@@ -23,7 +23,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(),
         new Post(),
         new Delete(),
-        new Patch(input: StudentNameDto::class),
+        new Patch(
+            input: StudentNameDto::class
+        ),
     ],
     security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")',
     provider: EntityToDtoStateProvider::class,
