@@ -50,6 +50,7 @@ final class StudentFactory extends ModelFactory
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'user' => UserFactory::createOne(),
+            'schoolClass' => null,
         ];
     }
 
