@@ -4,6 +4,7 @@ namespace App\Tests\Functional\SchoolClass;
 
 use App\Factory\SchoolClassFactory;
 use App\Factory\StudentFactory;
+use App\Factory\UserFactory;
 use App\Tests\Functional\Helper\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -20,6 +21,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $schoolClass = SchoolClassFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/classes/students/add', [
                 'json' => [
                     'student' => '/api/students/' . $student->getId(),
@@ -40,6 +42,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $schoolClass = SchoolClassFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/classes/students/add', [
                 'json' => [
                     'student' => '/api/students/55',
@@ -54,6 +57,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $student = StudentFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/classes/students/add', [
                 'json' => [
                     'student' => '/api/students/' . $student->getId(),
@@ -69,6 +73,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $student = StudentFactory::createOne(['schoolClass' => $schoolClass]);
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->delete('/api/classes/' . $schoolClass->getName() . '/students/' . $student->getId())
             ->assertStatus(204);
 
@@ -87,6 +92,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $student = StudentFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->delete('/api/classes/' . $schoolClass->getName() . '/students/' . $student->getId())
             ->assertStatus(422);
     }
@@ -97,6 +103,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $student = StudentFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->delete('/api/classes/8e/students/' . $student->getId())
             ->assertStatus(404);
     }
@@ -107,6 +114,7 @@ class SchoolClassStudentManagementTest extends ApiTestCase
         $schoolClass = SchoolClassFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->delete('/api/classes/' . $schoolClass->getName() . '/students/99')
             ->assertStatus(404);
     }
