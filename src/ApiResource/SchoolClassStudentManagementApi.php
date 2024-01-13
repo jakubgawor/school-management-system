@@ -28,6 +28,7 @@ use App\State\SchoolClassStudentManagementStateProvider;
             )
         )
     ],
+    security: 'is_granted("ROLE_TEACHER")',
     provider: SchoolClassStudentManagementStateProvider::class,
     processor: SchoolClassStudentManagementStateProcessor::class,
 )]
