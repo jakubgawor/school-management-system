@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Factory\SchoolClassFactory;
+use App\Factory\SubjectFactory;
 use App\Factory\UserFactory;
 use App\Factory\UserVerificationTokenFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -15,5 +16,6 @@ class AppFixtures extends Fixture
         UserFactory::createMany(50);
         UserVerificationTokenFactory::createMany(5);
         SchoolClassFactory::createMany(5);
+        SubjectFactory::createMany(2);
     }
 }
