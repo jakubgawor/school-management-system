@@ -30,6 +30,15 @@ class SubjectRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findOneById(int $id): ?Subject
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Subject[] Returns an array of Subject objects
 //     */
