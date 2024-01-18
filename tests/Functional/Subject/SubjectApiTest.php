@@ -3,13 +3,13 @@
 namespace App\Tests\Functional\Subject;
 
 use App\Factory\SchoolClassFactory;
+use App\Factory\StudentFactory;
 use App\Factory\SubjectFactory;
 use App\Factory\TeacherFactory;
 use App\Tests\Functional\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
-use function PHPUnit\Framework\assertTrue;
 
 class SubjectApiTest extends ApiTestCase
 {
@@ -203,6 +203,29 @@ class SubjectApiTest extends ApiTestCase
     }
 
     /** @test */
+    public function post_to_add_school_class_to_existing_subject_name_in_this_school_class()
+    {
+        $subject1 = SubjectFactory::createOne(['name' => 'biology'])->object();
+        $subject2 = SubjectFactory::createOne(['name' => 'biology'])->object();
+
+        $student = StudentFactory::createOne()->object();
+
+        $schoolClass = SchoolClassFactory::createOne(['name' => '5w']);
+        $schoolClass->addStudent($student);
+        $schoolClass->addSubject($subject1);
+        $schoolClass->save();
+
+        $this->browser()
+            ->post('/api/subjects/classes/add', [
+                'json' => [
+                    'subjectId' => $subject2->getId(),
+                    'schoolClassName' => $schoolClass->getName(),
+                ]
+            ])->assertStatus(422);
+
+    }
+
+    /** @test */
     public function post_to_add_school_class_with_not_existing_school_class()
     {
         $subject = SubjectFactory::createOne();
@@ -247,7 +270,7 @@ class SubjectApiTest extends ApiTestCase
         $schoolClassName = $subject->getSchoolClasses()->getValues()[0]->getName();
 
         $this->browser()
-            ->delete('/api/subjects/'.$subject->getId().'/classes/'.$schoolClassName)
+            ->delete('/api/subjects/' . $subject->getId() . '/classes/' . $schoolClassName)
             ->assertStatus(204);
 
     }
