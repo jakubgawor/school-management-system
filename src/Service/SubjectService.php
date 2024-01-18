@@ -33,6 +33,17 @@ class SubjectService
 
     }
 
+    public function teachedSameNameSubject(SchoolClass $schoolClass, Subject $subject): void
+    {
+        foreach($schoolClass->getSubjects()->getValues() as $value) {
+            if($value->getName() === $subject->getName()) {
+                throw new UnprocessableEntityHttpException('You cannot add more than one of the same subject to a class!');
+            }
+
+        }
+
+    }
+
     public function getSubjectById(int $id): Subject
     {
         $subject = $this->subjectRepository->findOneById($id);
