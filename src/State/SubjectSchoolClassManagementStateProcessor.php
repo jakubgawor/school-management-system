@@ -36,6 +36,8 @@ class SubjectSchoolClassManagementStateProcessor implements ProcessorInterface
         $subject = $this->subjectService->getSubjectById($data->subjectId);
         $schoolClass = $this->schoolClassService->getSchoolClassByName($data->schoolClassName);
 
+        $this->subjectService->teachedSameNameSubject($schoolClass, $subject);
+
         $this->subjectService->addSchoolClassToSubject($subject, $schoolClass);
 
         return $data;
