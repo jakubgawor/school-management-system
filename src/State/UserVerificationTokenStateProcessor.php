@@ -19,7 +19,7 @@ class UserVerificationTokenStateProcessor implements ProcessorInterface
 
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         assert($data instanceof UserVerificationTokenApi);
 

@@ -21,7 +21,7 @@ class EntityClassDtoStateProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         $stateOptions = $operation->getStateOptions();
         assert($stateOptions instanceof Options);

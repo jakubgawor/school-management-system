@@ -14,7 +14,7 @@ class UniqueSchoolClassNameValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if ($this->schoolClassRepository->findOneBy(['name' => $value])) {
             $this->context->buildViolation($constraint->message)
