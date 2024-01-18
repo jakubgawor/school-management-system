@@ -82,8 +82,9 @@ class SchoolClassTest extends ApiTestCase
     /** @test */
     public function deletion_school_class_with_students()
     {
-        $schoolClass = SchoolClassFactory::createOne();
+        $schoolClass = SchoolClassFactory::new()->withStudents(2)->create();
         $studentRepository = StudentFactory::repository();
+
 
         $this->browser()
             ->actingAs(UserFactory::new()->asAdmin()->create())

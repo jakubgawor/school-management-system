@@ -39,16 +39,15 @@ final class SchoolClassFactory extends ModelFactory
         parent::__construct();
     }
 
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
-     */
+    public function withStudents(int $numberOfStudents): self
+    {
+        return $this->addState(['students' => StudentFactory::createMany($numberOfStudents)]);
+    }
+
     protected function getDefaults(): array
     {
         return [
             'name' => self::faker()->randomDigit() . self::faker()->randomLetter(),
-            'students' => StudentFactory::createMany(2),
         ];
     }
 
