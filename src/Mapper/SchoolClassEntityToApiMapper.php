@@ -46,11 +46,11 @@ class SchoolClassEntityToApiMapper implements MapperInterface
             ]);
         }, $entity->getStudents()->getValues()));
 
-        $dto->subjects = array_map(function (Subject $subject) {
+        $dto->setSubjects(array_map(function (Subject $subject) {
             return $this->microMapper->map($subject, SubjectApi::class, [
                 MicroMapperInterface::MAX_DEPTH => 1,
             ]);
-        }, $entity->getSubjects()->getValues());
+        }, $entity->getSubjects()->getValues()));
 
         return $dto;
     }
