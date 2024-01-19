@@ -50,7 +50,7 @@ class SchoolClassApi
      * @var array<int, SubjectApi>
      */
     #[ApiProperty(writable: false)]
-    public array $subjects = [];
+    private array $subjects = [];
 
 
     public function getId(): ?int
@@ -81,6 +81,16 @@ class SchoolClassApi
     public function setStudents(?array $students): void
     {
         $this->students = $students;
+    }
+
+    public function getSubjects(): array
+    {
+        return $this->subjects;
+    }
+
+    public function setSubjects(array $subjects): void
+    {
+        $this->subjects = $subjects;
     }
 
 
