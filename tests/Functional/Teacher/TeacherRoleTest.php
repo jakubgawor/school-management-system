@@ -2,7 +2,6 @@
 
 namespace App\Tests\Functional\Teacher;
 
-use App\Factory\StudentFactory;
 use App\Factory\TeacherFactory;
 use App\Factory\UserFactory;
 use App\Tests\Functional\Helper\ApiTestCase;
@@ -31,6 +30,7 @@ class TeacherRoleTest extends ApiTestCase
                     '@type',
                     'firstName',
                     'lastName',
+                    'subject',
                 ]);
             });
     }

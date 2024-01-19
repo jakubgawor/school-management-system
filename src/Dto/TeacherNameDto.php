@@ -12,6 +12,9 @@ class TeacherNameDto
     public ?string $firstName = null;
     public ?string $lastName = null;
 
+    #[ApiProperty(readable: false, writable: false)]
+    public array $subject = [];
+
     public function getId(): ?int
     {
         return $this->id;

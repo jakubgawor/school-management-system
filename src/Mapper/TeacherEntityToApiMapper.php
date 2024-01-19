@@ -43,11 +43,6 @@ class TeacherEntityToApiMapper implements MapperInterface
         $dto->setUser($this->microMapper->map($entity->getUser(), UserApi::class, [
             MicroMapperInterface::MAX_DEPTH => 0,
         ]));
-//        $dto->setSubject($this->microMapper->map($entity->getSubjects(), SubjectApi::class, [
-//            MicroMapperInterface::MAX_DEPTH => 0,
-//        ]));
-
-
         $dto->setSubject(array_map(function (Subject $subject) {
             return $this->microMapper->map($subject, SubjectApi::class, [
                 MicroMapperInterface::MAX_DEPTH => 0,
