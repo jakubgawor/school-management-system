@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\Post;
 use App\Dto\EmailDto;
 use App\Dto\ResetPasswordDto;
 use App\State\EntityToDtoStateProvider;
-use App\State\ResetPasswordStateProcessor;
+use App\State\ResetPassword\ResetPasswordStateProcessor;
 
 #[ApiResource(
     shortName: 'Reset Password',

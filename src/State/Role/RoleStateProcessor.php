@@ -1,12 +1,13 @@
 <?php
 
-namespace App\State;
+namespace App\State\Role;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\User;
+use App\State\EntityClassDtoStateProcessor;
 use App\Validator\UserRoleExistence;
 use App\Validator\UserRoleExistenceValidator;
 use Symfonycasts\MicroMapper\MicroMapperInterface;

@@ -5,7 +5,7 @@ namespace App\ApiResource;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use App\State\EntityToDtoStateProvider;
-use App\State\UserVerificationTokenStateProcessor;
+use App\State\Token\UserVerificationTokenStateProcessor;
 use App\Validator\VerificationToken;
 use Symfony\Component\Validator\Constraints\NotBlank;
 

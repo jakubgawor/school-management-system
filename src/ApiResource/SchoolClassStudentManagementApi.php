@@ -6,8 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
-use App\State\SchoolClassStudentManagementStateProcessor;
-use App\State\SchoolClassStudentManagementStateProvider;
+use App\State\SchoolClass\SchoolClassStudentManagementStateProcessor;
+use App\State\SchoolClass\SchoolClassStudentManagementStateProvider;
 
 #[ApiResource(
     uriTemplate: '/class/add',

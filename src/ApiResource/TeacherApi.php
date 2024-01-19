@@ -13,7 +13,7 @@ use ApiPlatform\Metadata\Post;
 use App\Dto\TeacherNameDto;
 use App\Entity\Teacher;
 use App\State\EntityToDtoStateProvider;
-use App\State\RoleStateProcessor;
+use App\State\Role\RoleStateProcessor;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(

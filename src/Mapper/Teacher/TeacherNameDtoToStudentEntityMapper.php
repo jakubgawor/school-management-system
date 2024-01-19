@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mapper;
+namespace App\Mapper\Teacher;
 
 use App\Dto\TeacherNameDto;
 use App\Entity\Teacher;

@@ -13,7 +13,7 @@ use ApiPlatform\Metadata\Post;
 use App\Entity\Subject;
 use App\State\EntityClassDtoStateProcessor;
 use App\State\EntityToDtoStateProvider;
-use App\State\SubjectStateProcessor;
+use App\State\Subject\SubjectStateProcessor;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(

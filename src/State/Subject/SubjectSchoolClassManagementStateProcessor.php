@@ -1,6 +1,6 @@
 <?php
 
-namespace App\State;
+namespace App\State\Subject;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;

@@ -7,8 +7,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Dto\SubjectSchoolClassDto;
-use App\State\SubjectSchoolClassManagementStateProcessor;
-use App\State\SubjectSchoolClassManagementStateProvider;
+use App\State\Subject\SubjectSchoolClassManagementStateProcessor;
+use App\State\Subject\SubjectSchoolClassManagementStateProvider;
 
 #[ApiResource(
     shortName: 'Subject management',

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mapper;
+namespace App\Mapper\Subject;
 
 use App\ApiResource\SubjectApi;
 use App\Entity\Subject;

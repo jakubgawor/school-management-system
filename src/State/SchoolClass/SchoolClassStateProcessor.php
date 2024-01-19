@@ -1,12 +1,13 @@
 <?php
 
-namespace App\State;
+namespace App\State\SchoolClass;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\SchoolClass;
 use App\Service\SchoolClassService;
+use App\State\EntityClassDtoStateProcessor;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 class SchoolClassStateProcessor implements ProcessorInterface

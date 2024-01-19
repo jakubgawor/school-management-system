@@ -1,12 +1,13 @@
 <?php
 
-namespace App\State;
+namespace App\State\Subject;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\SubjectApi;
 use App\Entity\Teacher;
 use App\Service\SubjectService;
+use App\State\EntityClassDtoStateProcessor;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 class SubjectStateProcessor implements ProcessorInterface

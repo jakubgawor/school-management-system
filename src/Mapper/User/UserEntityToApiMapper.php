@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mapper;
+namespace App\Mapper\User;
 
 use App\ApiResource\UserApi;
 use App\Entity\User;

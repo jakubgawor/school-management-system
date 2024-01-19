@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mapper;
+namespace App\Mapper\Student;
 
 use App\ApiResource\StudentApi;
 use App\Entity\Student;

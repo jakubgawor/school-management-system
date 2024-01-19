@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Entity\SchoolClass;
 use App\State\EntityToDtoStateProvider;
-use App\State\SchoolClassStateProcessor;
+use App\State\SchoolClass\SchoolClassStateProcessor;
 use App\Validator\UniqueSchoolClassName;
 
 // todo search filter

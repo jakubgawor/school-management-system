@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Mapper;
+namespace App\Mapper\Teacher;
 
-use App\ApiResource\SchoolClassApi;
-use App\ApiResource\StudentApi;
+use App\ApiResource\SubjectApi;
+use App\ApiResource\TeacherApi;
 use App\ApiResource\UserApi;
-use App\Entity\Student;
+use App\Entity\Subject;
+use App\Entity\Teacher;
 use Symfonycasts\MicroMapper\AsMapper;
 use Symfonycasts\MicroMapper\MapperInterface;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
-#[AsMapper(from: Student::class, to: StudentApi::class)]
-class StudentEntityToApiMapper implements MapperInterface
+#[AsMapper(from: Teacher::class, to: TeacherApi::class)]
+class TeacherEntityToApiMapper implements MapperInterface
 {
     public function __construct(
         private MicroMapperInterface $microMapper,
@@ -22,9 +23,9 @@ class StudentEntityToApiMapper implements MapperInterface
     public function load(object $from, string $toClass, array $context): object
     {
         $entity = $from;
-        assert($entity instanceof Student);
+        assert($entity instanceof Teacher);
 
-        $dto = new StudentApi();
+        $dto = new TeacherApi();
         $dto->setId($entity->getId());
 
         return $dto;
@@ -34,19 +35,19 @@ class StudentEntityToApiMapper implements MapperInterface
     {
         $entity = $from;
         $dto = $to;
-        assert($entity instanceof Student);
-        assert($dto instanceof StudentApi);
+        assert($entity instanceof Teacher);
+        assert($dto instanceof TeacherApi);
 
         $dto->setFirstName($entity->getFirstName());
         $dto->setLastName($entity->getLastName());
         $dto->setUser($this->microMapper->map($entity->getUser(), UserApi::class, [
             MicroMapperInterface::MAX_DEPTH => 0,
         ]));
-        if ($entity->getSchoolClass()) {
-            $dto->setSchoolClass($this->microMapper->map($entity->getSchoolClass(), SchoolClassApi::class, [
+        $dto->setSubject(array_map(function (Subject $subject) {
+            return $this->microMapper->map($subject, SubjectApi::class, [
                 MicroMapperInterface::MAX_DEPTH => 0,
-            ]));
-        }
+            ]);
+        }, $entity->getSubjects()->getValues()));
 
         return $dto;
     }

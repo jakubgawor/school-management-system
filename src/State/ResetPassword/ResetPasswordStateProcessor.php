@@ -1,6 +1,6 @@
 <?php
 
-namespace App\State;
+namespace App\State\ResetPassword;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
