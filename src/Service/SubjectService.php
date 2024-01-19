@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\SchoolClass;
+use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Teacher;
 use App\Repository\SubjectRepository;
@@ -33,7 +34,7 @@ class SubjectService
 
     }
 
-    public function teachedSameNameSubject(SchoolClass $schoolClass, Subject $subject): void
+    public function taughtSameNameSubject(SchoolClass $schoolClass, Subject $subject): void
     {
         foreach($schoolClass->getSubjects()->getValues() as $value) {
             if($value->getName() === $subject->getName()) {
@@ -67,6 +68,29 @@ class SubjectService
         $subject->removeSchoolClass($schoolClass);
         $this->entityManager->persist($subject);
         $this->entityManager->flush();
+    }
+
+    public function findMatchingSubjectByNameForStudent(string $subjectName, Student $student): Subject
+    {
+        $subjects = $this->subjectRepository->findByName($subjectName);
+
+        $subjectIdsWithProvidedName = array_map(function (Subject $subject) {
+            return $subject->getId();
+        }, $subjects);
+
+
+        $studentSubjectId = null;
+        foreach ($student->getSchoolClass()->getSubjects()->getValues() as $studentSubjects) {
+            if (in_array($studentSubjects->getId(), $subjectIdsWithProvidedName)) {
+                $studentSubjectId = $studentSubjects->getId();
+            }
+        }
+
+        if(!$studentSubjectId) {
+            throw new UnprocessableEntityHttpException('This student is not taught this subject');
+        }
+
+        return $this->subjectRepository->findOneById($studentSubjectId);
     }
 
 }
