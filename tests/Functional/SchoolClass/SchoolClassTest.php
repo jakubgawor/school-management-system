@@ -29,7 +29,8 @@ class SchoolClassTest extends ApiTestCase
                     '@id',
                     '@type',
                     'name',
-                    'students'
+                    'students',
+                    'subjects',
                 ]);
             });
 

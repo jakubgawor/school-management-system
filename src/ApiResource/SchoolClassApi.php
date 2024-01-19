@@ -46,6 +46,12 @@ class SchoolClassApi
     #[ApiProperty(writable: false)]
     private array $students = [];
 
+    /**
+     * @var array<int, SubjectApi>
+     */
+    #[ApiProperty(writable: false)]
+    public array $subjects = [];
+
 
     public function getId(): ?int
     {

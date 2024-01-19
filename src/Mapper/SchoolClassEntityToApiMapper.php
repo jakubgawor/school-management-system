@@ -4,8 +4,10 @@ namespace App\Mapper;
 
 use App\ApiResource\SchoolClassApi;
 use App\ApiResource\StudentApi;
+use App\ApiResource\SubjectApi;
 use App\Entity\SchoolClass;
 use App\Entity\Student;
+use App\Entity\Subject;
 use Symfonycasts\MicroMapper\AsMapper;
 use Symfonycasts\MicroMapper\MapperInterface;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
@@ -43,6 +45,12 @@ class SchoolClassEntityToApiMapper implements MapperInterface
                 MicroMapperInterface::MAX_DEPTH => 0,
             ]);
         }, $entity->getStudents()->getValues()));
+
+        $dto->subjects = array_map(function (Subject $subject) {
+            return $this->microMapper->map($subject, SubjectApi::class, [
+                MicroMapperInterface::MAX_DEPTH => 1,
+            ]);
+        }, $entity->getSubjects()->getValues());
 
         return $dto;
     }
