@@ -45,6 +45,10 @@ class TeacherApi
     #[ApiProperty(readable: false)]
     private ?UserApi $user = null;
 
+    /** @var array<int, SubjectApi> */
+    #[ApiProperty(readable: true, writable: false)]
+    private array $subject = [];
+
     /**
      * @return UserApi|null
      */
@@ -94,5 +98,17 @@ class TeacherApi
     {
         $this->lastName = $lastName;
     }
+
+    public function getSubject(): array
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(array $subject): void
+    {
+        $this->subject = $subject;
+    }
+
+
 
 }
