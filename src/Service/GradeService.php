@@ -40,4 +40,9 @@ class GradeService
         $this->entityManager->flush();
     }
 
+    public function removeGrade(Grade $grade): void
+    {
+        $this->entityManager->remove($grade);
+        $this->entityManager->flush();
+    }
 }
