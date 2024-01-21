@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use App\Dto\AddGradeDto;
 use App\State\Grade\AddGradeStateProcessor;
 use App\State\Grade\DeleteGradeStateProcessor;
+use App\State\Grade\GradesAverageStateProvider;
 use App\State\Grade\GradeStateProvider;
 
 #[ApiResource(
@@ -22,6 +23,10 @@ use App\State\Grade\GradeStateProvider;
         new Get(
             uriTemplate: '/grades/students/{studentId}/{subjectName}',
             provider: GradeStateProvider::class,
+        ),
+        new Get(
+            uriTemplate: '/grades/student/{studentId}/{subjectName}/average',
+            provider: GradesAverageStateProvider::class,
         ),
         new Delete(
             uriTemplate: '/grade/{gradeId}',
