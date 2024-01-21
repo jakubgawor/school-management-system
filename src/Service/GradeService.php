@@ -45,4 +45,18 @@ class GradeService
         $this->entityManager->remove($grade);
         $this->entityManager->flush();
     }
+
+    public function averageGrade(array $grades): float
+    {
+        $totalWeightedGrade = 0;
+        $totalWeight = 0;
+
+        foreach ($grades as $grade) {
+            $totalWeightedGrade += $grade->grade * $grade->weight;
+            $totalWeight += $grade->weight;
+        }
+
+        return round($totalWeightedGrade / $totalWeight, 2);
+    }
+
 }
