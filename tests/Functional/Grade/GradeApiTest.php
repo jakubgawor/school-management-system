@@ -127,5 +127,47 @@ class GradeApiTest extends ApiTestCase
 
     }
 
+    /** @test */
+    public function get_student_average()
+    {
+        $schoolClass = SchoolClassFactory::new(['name' => '9z'])->withStudents(1)->create()->object();
+        $student = $schoolClass->getStudents()->getValues()[0];
+        $teacher = TeacherFactory::createOne();
+        $subject = SubjectFactory::createOne(['name' => 'biology', 'teacher' => $teacher]);
+        $subject->addSchoolClass($schoolClass);
+        $subject->save();
+
+        GradeFactory::createMany(2, [
+            'grade' => '4.00',
+            'student' => $student,
+            'subject' => $subject,
+            'teacher' => $teacher,
+            'weight' => 1
+        ]);
+
+        GradeFactory::createMany(2, [
+            'grade' => '2.50',
+            'student' => $student,
+            'subject' => $subject,
+            'teacher' => $teacher,
+            'weight' => 3
+        ]);
+
+        GradeFactory::createMany(2, [
+            'grade' => '5.00',
+            'student' => $student,
+            'subject' => $subject,
+            'teacher' => $teacher,
+        ]);
+
+        // average = 3.58
+
+        $this->browser()
+            ->get('/api/grades/student/' . $student->getId() . '/' . $subject->getName() .'/average')
+            ->assertStatus(200)
+            ->assertJsonMatches('average', 3.58);
+
+    }
+
 
 }
