@@ -29,12 +29,9 @@ use Zenstruck\Foundry\RepositoryProxy;
  */
 final class SchoolClassFactory extends ModelFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
-    public function __construct()
+    public function __construct(
+        private SchoolClassRepository $schoolClassRepository,
+    )
     {
         parent::__construct();
     }
@@ -47,7 +44,7 @@ final class SchoolClassFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->randomDigit() . self::faker()->randomLetter(),
+            'name' => $this->generateUniqueName(),
         ];
     }
 
@@ -56,13 +53,34 @@ final class SchoolClassFactory extends ModelFactory
      */
     protected function initialize(): self
     {
-        return $this
-            // ->afterInstantiate(function(SchoolClass $schoolClass): void {})
-        ;
+        return $this// ->afterInstantiate(function(SchoolClass $schoolClass): void {})
+            ;
     }
 
     protected static function getClass(): string
     {
         return SchoolClass::class;
     }
+
+    private function generateUniqueName(): string
+    {
+        for ($attempts = 0, $maxAttempts = 100; $attempts < $maxAttempts; $attempts++) {
+            $name = self::faker()->randomDigit() . self::faker()->randomLetter();
+            if ($this->isNameUsed($name)) {
+                return $name;
+            }
+        }
+
+        throw new \Exception('Failed to generate a unique name');
+    }
+
+    private function isNameUsed(string $name): bool
+    {
+        if ($this->schoolClassRepository->findBy(['name' => $name])) {
+            return false;
+        }
+
+        return true;
+    }
+
 }
