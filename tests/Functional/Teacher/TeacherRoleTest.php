@@ -138,7 +138,47 @@ class TeacherRoleTest extends ApiTestCase
     }
 
     /** @test */
-    public function patch_to_edit_teacher()
+    public function teacher_self_patch()
+    {
+        $teacher = TeacherFactory::createOne();
+
+        $this->browser()
+            ->actingAs($teacher->getUser())
+            ->patch('/api/teachers/' . $teacher->getId(), [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json',
+                ]
+            ])
+            ->assertStatus(200)
+            ->assertJsonMatches('firstName', 'John')
+            ->assertJsonMatches('lastName', 'Doe');
+    }
+
+    /** @test */
+    public function teacher_trying_to_edit_other_teacher()
+    {
+        $teacher = TeacherFactory::createOne();
+
+        $this->browser()
+            ->actingAs($teacher->getUser())
+            ->patch('/api/teachers/' . TeacherFactory::createOne()->getId(), [
+                'json' => [
+                    'firstName' => 'John',
+                    'lastName' => 'Doe',
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/merge-patch+json',
+                ]
+            ])
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function patch_to_edit_teacher_by_admin()
     {
         $teacher = TeacherFactory::createOne();
 
