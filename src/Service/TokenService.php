@@ -39,7 +39,7 @@ class TokenService
         return $token;
     }
 
-    public function saveToken(string $token, User $userEntity)
+    public function saveToken(string $token, User $userEntity): void
     {
         $verificationToken = new UserVerificationToken();
         $verificationToken->setToken($token);
