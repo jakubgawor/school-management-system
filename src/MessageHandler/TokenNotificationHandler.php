@@ -20,7 +20,7 @@ class TokenNotificationHandler
     {
         $message = (new Email())
             ->from('sub@example.com')
-            ->to('sub@example.com')
+            ->to($verifyMailNotification->getSendTo())
             ->subject('Verification Token')
             ->text($verifyMailNotification->getContent());
 

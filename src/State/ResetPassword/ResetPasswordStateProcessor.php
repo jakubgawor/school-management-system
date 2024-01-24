@@ -29,7 +29,7 @@ class ResetPasswordStateProcessor implements ProcessorInterface
 
             $token = $this->tokenService->createToken($user->getId());
 
-            $this->tokenNotificationService->sendTokenNotification($token);
+            $this->tokenNotificationService->sendTokenNotification($user->getEmail(), $token);
 
         }
 

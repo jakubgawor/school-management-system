@@ -13,8 +13,8 @@ class TokenNotificationService
     {
     }
 
-    public function sendTokenNotification(string $token): void
+    public function sendTokenNotification(string $sendTo, string $token): void
     {
-        $this->bus->dispatch(new TokenNotification($token));
+        $this->bus->dispatch(new TokenNotification($sendTo, $token));
     }
 }
