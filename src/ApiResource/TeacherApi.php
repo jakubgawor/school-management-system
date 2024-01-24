@@ -23,7 +23,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new GetCollection(),
         new Post(),
         new Delete(),
-        new Patch(input: TeacherNameDto::class),
+        new Patch(
+            security: 'is_granted("EDIT_TEACHER", object)',
+            input: TeacherNameDto::class
+        ),
     ],
     security: 'is_granted("ROLE_ADMIN")',
     provider: EntityToDtoStateProvider::class,
@@ -108,7 +111,6 @@ class TeacherApi
     {
         $this->subject = $subject;
     }
-
 
 
 }
