@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             input: StudentNameDto::class
         ),
     ],
-    security: 'is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")',
+    security: 'is_granted("ROLE_TEACHER")',
     provider: EntityToDtoStateProvider::class,
     processor: RoleStateProcessor::class,
     stateOptions: new Options(Student::class),
