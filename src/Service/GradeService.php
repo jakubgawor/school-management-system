@@ -7,14 +7,17 @@ use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Teacher;
 use App\Entity\User;
+use App\Repository\GradeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class GradeService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private GradeRepository        $gradeRepository,
     )
     {
     }
@@ -59,4 +62,25 @@ class GradeService
         return round($totalWeightedGrade / $totalWeight, 2);
     }
 
+    public function findGradeById(int $id): Grade
+    {
+        $grade = $this->gradeRepository->findOneBy(['id' => $id]);
+
+        if (!$grade) {
+            throw new ResourceNotFoundException('Not found');
+        }
+
+        return $grade;
+    }
+
+    public function findGradesByStudentIdAndSubjectName(int $studentId, string $subjectName): array
+    {
+        $grades = $this->gradeRepository->findGradesByStudentAndSubjectName($studentId, $subjectName);
+
+        if(empty($grades)) {
+            throw new ResourceNotFoundException('This student has no grades in this subject');
+        }
+
+        return $grades;
+    }
 }

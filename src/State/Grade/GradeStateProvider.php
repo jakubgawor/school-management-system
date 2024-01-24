@@ -6,14 +6,13 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Dto\StudentGradeDto;
-use App\Repository\GradeRepository;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use App\Service\GradeService;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 class GradeStateProvider implements ProviderInterface
 {
     public function __construct(
-        private GradeRepository      $gradeRepository,
+        private GradeService         $gradeService,
         private MicroMapperInterface $microMapper,
     )
     {
@@ -22,21 +21,10 @@ class GradeStateProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if ($operation instanceof Delete) {
-            $grade = $this->gradeRepository->findOneBy(['id' => $uriVariables['gradeId']]);
-
-            if (!$grade) {
-                throw new ResourceNotFoundException('Not found');
-            }
-
-            return $grade;
+            return $this->gradeService->findGradeById($uriVariables['gradeId']);
         }
 
-
-        $grades = $this->gradeRepository->findGradesByStudentAndSubjectName($uriVariables['studentId'], $uriVariables['subjectName']);
-
-        if (!$grades) {
-            throw new ResourceNotFoundException('Not found');
-        }
+        $grades = $this->gradeService->findGradesByStudentIdAndSubjectName($uriVariables['studentId'], $uriVariables['subjectName']);
 
         $dtos = [];
         foreach ($grades as $grade) {
