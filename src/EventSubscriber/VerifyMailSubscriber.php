@@ -38,6 +38,6 @@ final class VerifyMailSubscriber implements EventSubscriberInterface
 
         $verificationToken = $this->tokenService->createToken($user->getId());
 
-        $this->tokenNotificationService->sendTokenNotification($verificationToken);
+        $this->tokenNotificationService->sendTokenNotification($user->getEmail(), $verificationToken);
     }
 }
