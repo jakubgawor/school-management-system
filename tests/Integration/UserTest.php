@@ -44,5 +44,9 @@ class UserTest extends ApiTestCase
             $token,
             $this->transport('async')->dispatched()->messages()[0]->getContent()
         );
+        $this->assertSame(
+            'email@example.com',
+            $this->transport('async')->dispatched()->messages()[0]->getSendto()
+        );
     }
 }

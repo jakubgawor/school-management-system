@@ -42,6 +42,10 @@ class UserResetPasswordTest extends ApiTestCase
             $token,
             $this->transport('async')->dispatched()->messages()[0]->getContent()
         );
+        $this->assertSame(
+            $user->getEmail(),
+            $this->transport('async')->dispatched()->messages()[0]->getSendTo()
+        );
 
         $this->browser()
             ->post('/api/account/reset-password/confirm', [
