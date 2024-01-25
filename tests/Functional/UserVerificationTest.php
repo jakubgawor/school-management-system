@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Integration;
+namespace App\Tests\Functional;
 
 use App\Factory\UserFactory;
 use App\Factory\UserVerificationTokenFactory;
