@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Functional\Helper;
+namespace App\Tests\Integration\Helper;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Browser\HttpOptions;

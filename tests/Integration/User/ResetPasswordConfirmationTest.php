@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Functional\User;
+namespace App\Tests\Integration\User;
 
 use App\Factory\UserFactory;
 use App\Factory\UserVerificationTokenFactory;
-use App\Tests\Functional\Helper\ApiTestCase;
+use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 

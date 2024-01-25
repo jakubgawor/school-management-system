@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Functional\Teacher;
+namespace App\Tests\Integration\Teacher;
 
 use App\Factory\TeacherFactory;
 use App\Factory\UserFactory;
-use App\Tests\Functional\Helper\ApiTestCase;
+use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;

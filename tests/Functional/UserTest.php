@@ -4,7 +4,7 @@ namespace App\Tests\Functional;
 
 use App\Factory\UserFactory;
 use App\Message\TokenNotification;
-use App\Tests\Functional\Helper\ApiTestCase;
+use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 use Zenstruck\Messenger\Test\InteractsWithMessenger;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Functional\Grade;
+namespace App\Tests\Integration\Grade;
 
 use App\Entity\Grade;
 use App\Entity\SchoolClass;
@@ -11,7 +11,7 @@ use App\Factory\GradeFactory;
 use App\Factory\SchoolClassFactory;
 use App\Factory\SubjectFactory;
 use App\Factory\TeacherFactory;
-use App\Tests\Functional\Helper\ApiTestCase;
+use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
