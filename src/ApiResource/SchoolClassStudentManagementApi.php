@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\State\SchoolClass\SchoolClassStudentManagementStateProcessor;
 use App\State\SchoolClass\SchoolClassStudentManagementStateProvider;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ApiResource(
     uriTemplate: '/class/add',
@@ -34,8 +35,10 @@ use App\State\SchoolClass\SchoolClassStudentManagementStateProvider;
 )]
 class SchoolClassStudentManagementApi
 {
+    #[NotBlank]
     public ?StudentApi $student = null;
 
     /** School class name */
+    #[NotBlank]
     public ?string $name = null;
 }
