@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\UserVerificationToken;
-use App\Repository\UserRepository;
 use App\Repository\UserVerificationTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
@@ -13,19 +12,15 @@ class TokenService
 {
     public function __construct(
         private EntityManagerInterface          $entityManager,
-        private UserRepository                  $userRepository,
         private UserVerificationTokenRepository $userVerificationTokenRepository,
+        private UserService                     $userService,
     )
     {
     }
 
     public function createToken(Uuid $userUuid): string
     {
-        $userEntity = $this->userRepository->findOneBy(['id' => $userUuid]);
-
-        if (!$userEntity) {
-            throw new \LogicException('User not found');
-        }
+        $userEntity = $this->userService->findUserByUuid($userUuid);
 
         $existingToken = $this->userVerificationTokenRepository->findOneBy(['user' => $userEntity]);
         if ($existingToken) {
