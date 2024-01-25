@@ -13,6 +13,7 @@ use App\Entity\SchoolClass;
 use App\State\EntityToDtoStateProvider;
 use App\State\SchoolClass\SchoolClassStateProcessor;
 use App\Validator\UniqueSchoolClassName;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 // todo search filter
 #[ApiResource(
@@ -38,6 +39,7 @@ class SchoolClassApi
     private ?int $id = null;
 
     #[UniqueSchoolClassName]
+    #[NotBlank]
     private ?string $name = null;
 
     /**
