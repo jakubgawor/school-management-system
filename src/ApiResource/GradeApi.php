@@ -17,21 +17,24 @@ use App\State\Grade\GradeStateProvider;
     operations: [
         new Post(
             uriTemplate: '/grade/students/{studentId}',
+            security: 'is_granted("ROLE_TEACHER")',
             input: AddGradeDto::class,
-            processor: AddGradeStateProcessor::class,
+            processor: AddGradeStateProcessor::class
         ),
         new Get(
             uriTemplate: '/grades/students/{studentId}/{subjectName}',
-            provider: GradeStateProvider::class,
+            provider: GradeStateProvider::class
         ),
         new Get(
             uriTemplate: '/grades/student/{studentId}/{subjectName}/average',
+            security: 'is_granted("VIEW_AVERAGE", object)',
             provider: GradesAverageStateProvider::class,
         ),
         new Delete(
             uriTemplate: '/grade/{gradeId}',
+            security: 'is_granted("ROLE_TEACHER")',
             provider: GradeStateProvider::class,
-            processor: DeleteGradeStateProcessor::class,
+            processor: DeleteGradeStateProcessor::class
         )
     ],
 )]
