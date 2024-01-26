@@ -15,7 +15,6 @@ use App\State\SchoolClass\SchoolClassStateProcessor;
 use App\Validator\UniqueSchoolClassName;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-// todo search filter
 #[ApiResource(
     shortName: 'Class',
     operations: [
@@ -28,7 +27,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
             security: 'is_granted("ROLE_ADMIN")'
         ),
     ],
-    security: 'is_granted("ROLE_TEACHER")',
+    security: 'is_granted("ROLE_STUDENT")',
     provider: EntityToDtoStateProvider::class,
     processor: SchoolClassStateProcessor::class,
     stateOptions: new Options(SchoolClass::class),
