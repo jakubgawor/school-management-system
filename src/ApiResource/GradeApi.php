@@ -23,6 +23,7 @@ use App\State\Grade\GradeStateProvider;
         ),
         new Get(
             uriTemplate: '/grades/students/{studentId}/{subjectName}',
+            security: 'is_granted("ROLE_STUDENT")',
             provider: GradeStateProvider::class
         ),
         new Get(
