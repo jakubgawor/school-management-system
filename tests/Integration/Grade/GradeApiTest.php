@@ -10,8 +10,10 @@ use App\Entity\User;
 use App\Enum\GradeEnum;
 use App\Factory\GradeFactory;
 use App\Factory\SchoolClassFactory;
+use App\Factory\StudentFactory;
 use App\Factory\SubjectFactory;
 use App\Factory\TeacherFactory;
+use App\Factory\UserFactory;
 use App\Message\GradeNotification;
 use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
@@ -187,11 +189,57 @@ class GradeApiTest extends ApiTestCase
         // average = 3.58
 
         $this->browser()
+            ->actingAs($student->getUser())
             ->get('/api/grades/student/' . $student->getId() . '/' . $subject->getName() .'/average')
             ->assertStatus(200)
             ->assertJsonMatches('average', 3.58);
 
     }
 
+    /** @test */
+    public function get_student_average_other_student()
+    {
+        $schoolClass = SchoolClassFactory::new(['name' => '9z'])->withStudents(1)->create()->object();
+        $student = $schoolClass->getStudents()->getValues()[0];
+        $teacher = TeacherFactory::createOne();
+        $subject = SubjectFactory::createOne(['name' => 'biology', 'teacher' => $teacher]);
+        $subject->addSchoolClass($schoolClass);
+        $subject->save();
+
+        GradeFactory::createMany(2, [
+            'grade' => '5.00',
+            'student' => $student,
+            'subject' => $subject,
+            'teacher' => $teacher,
+        ]);
+
+        $this->browser()
+            ->actingAs(StudentFactory::createOne()->getUser())
+            ->get('/api/grades/student/' . $student->getId() . '/' . $subject->getName() .'/average')
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function get_student_average_teacher_role()
+    {
+        $schoolClass = SchoolClassFactory::new(['name' => '9z'])->withStudents(1)->create()->object();
+        $student = $schoolClass->getStudents()->getValues()[0];
+        $teacher = TeacherFactory::createOne();
+        $subject = SubjectFactory::createOne(['name' => 'biology', 'teacher' => $teacher]);
+        $subject->addSchoolClass($schoolClass);
+        $subject->save();
+
+        GradeFactory::createMany(2, [
+            'grade' => '5.00',
+            'student' => $student,
+            'subject' => $subject,
+            'teacher' => $teacher,
+        ]);
+
+        $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
+            ->get('/api/grades/student/' . $student->getId() . '/' . $subject->getName() .'/average')
+            ->assertStatus(200);
+    }
 
 }
