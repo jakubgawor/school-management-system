@@ -30,7 +30,8 @@ use App\State\Subject\SubjectSchoolClassManagementStateProvider;
         ),
     ],
     input: SubjectSchoolClassDto::class,
-    processor: SubjectSchoolClassManagementStateProcessor::class,
+    security: 'is_granted("ROLE_ADMIN")',
+    processor: SubjectSchoolClassManagementStateProcessor::class
 )]
 class SubjectSchoolClassManagementApi
 {
