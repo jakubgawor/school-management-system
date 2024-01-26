@@ -18,6 +18,7 @@ framework:
     routing:
       # Route your messages to the transports
       'App\Message\TokenNotification': async
+      'App\Message\GradeNotification': async
 
 when@test:
   framework:
