@@ -7,20 +7,30 @@ use App\Entity\SchoolClass;
 use App\Entity\Student;
 use App\Entity\Teacher;
 use App\Entity\User;
+use App\Enum\GradeEnum;
 use App\Factory\GradeFactory;
 use App\Factory\SchoolClassFactory;
 use App\Factory\SubjectFactory;
 use App\Factory\TeacherFactory;
+use App\Message\GradeNotification;
 use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Messenger\Test\InteractsWithMessenger;
+use Zenstruck\Messenger\Test\Transport\TestTransport;
 use function Zenstruck\Foundry\repository;
 
 class GradeApiTest extends ApiTestCase
 {
     use Factories;
     use ResetDatabase;
+    use InteractsWithMessenger;
+
+    protected function setUp(): void
+    {
+        TestTransport::resetAll();
+    }
 
     /** @test */
     public function post_to_add_grade_to_student()
@@ -61,6 +71,17 @@ class GradeApiTest extends ApiTestCase
             'teacher' => $user->getTeacher(),
             'student' => $student,
         ]));
+
+
+        $this->transport('async')->queue()->assertContains(GradeNotification::class, 1);
+        $this->assertSame(
+            GradeEnum::B->name,
+            $this->transport('async')->dispatched()->messages()[0]->getGradeValue()
+        );
+        $this->assertSame(
+            $student->getUser()->getEmail(),
+            $this->transport('async')->dispatched()->messages()[0]->getSendto()
+        );
 
     }
 
