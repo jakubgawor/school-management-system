@@ -33,11 +33,13 @@ An application that enables efficient management of users, teaching processes, a
 - API Platform 3.2
 - Doctrine
 - Mysql
+- Swagger
 - Composer
 - Phpunit
 - Mockery
 - XDebug
 - Docker
+- Git
 
 ## Installation
 1. Clone the repository
@@ -82,4 +84,7 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
+## Endpoints
+
 ## Tests coverage
+
