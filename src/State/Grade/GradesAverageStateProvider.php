@@ -23,6 +23,8 @@ class GradesAverageStateProvider implements ProviderInterface
 
         $averageDto = new GradeAverageDto();
         $averageDto->average = $average;
+        $averageDto->studentId = $uriVariables['studentId'];
+        $averageDto->subjectName = $uriVariables['subjectName'];
 
         return $averageDto;
     }
