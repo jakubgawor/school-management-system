@@ -85,6 +85,8 @@ php bin/console doctrine:migrations:migrate
 ```
 
 ## Endpoints
+![endpoints](https://github.com/jakubgawor/school-management-system/assets/126957667/57979fe6-e7b8-40a6-a8b5-ce68c320deb2)
 
 ## Tests coverage
+![tests-coverage](https://github.com/jakubgawor/school-management-system/assets/126957667/dd52aaf1-53f2-4a6a-8e93-b75b2ffdde36)
 
