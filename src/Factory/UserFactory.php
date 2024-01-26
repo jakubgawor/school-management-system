@@ -52,6 +52,11 @@ final class UserFactory extends ModelFactory
         return $this->withRoles(['ROLE_TEACHER']);
     }
 
+    public function asStudent(): self
+    {
+        return $this->withRoles(['ROLE_STUDENT']);
+    }
+
     protected function getDefaults(): array
     {
         return [
