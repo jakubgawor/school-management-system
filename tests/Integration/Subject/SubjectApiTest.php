@@ -6,6 +6,7 @@ use App\Factory\SchoolClassFactory;
 use App\Factory\StudentFactory;
 use App\Factory\SubjectFactory;
 use App\Factory\TeacherFactory;
+use App\Factory\UserFactory;
 use App\Tests\Integration\Helper\ApiTestCase;
 use Zenstruck\Browser\Json;
 use Zenstruck\Foundry\Test\Factories;
@@ -22,6 +23,7 @@ class SubjectApiTest extends ApiTestCase
         SubjectFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asStudent()->create())
             ->get('/api/subjects')
             ->assertStatus(200)
             ->use(function (Json $json) {
@@ -49,6 +51,7 @@ class SubjectApiTest extends ApiTestCase
         $teacher = TeacherFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects', [
                 'json' => [
                     'name' => 'biology',
@@ -61,6 +64,7 @@ class SubjectApiTest extends ApiTestCase
     public function post_to_create_subject_without_teacher()
     {
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects', [
                 'json' => [
                     'name' => 'biology',
@@ -72,6 +76,7 @@ class SubjectApiTest extends ApiTestCase
     public function post_to_create_subject_without_name()
     {
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects', [
                 'json' => [
                     'teacher' => '/api/teachers/' . TeacherFactory::createOne()->getId(),
@@ -83,6 +88,7 @@ class SubjectApiTest extends ApiTestCase
     public function post_to_create_new_subject_with_not_existing_teacher()
     {
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects', [
                 'json' => [
                     'name' => '',
@@ -98,6 +104,7 @@ class SubjectApiTest extends ApiTestCase
         $subject = SubjectFactory::createOne(['teacher' => $teacher]);
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects', [
                 'json' => [
                     'name' => $subject->getName(),
@@ -114,6 +121,7 @@ class SubjectApiTest extends ApiTestCase
         $teacher = TeacherFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects', [
                 'json' => [
                     'name' => 'biology',
@@ -128,6 +136,7 @@ class SubjectApiTest extends ApiTestCase
         $subject = SubjectFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asTeacher()->create())
             ->delete('/api/subjects/' . $subject->getId())
             ->assertStatus(204);
     }
@@ -139,6 +148,7 @@ class SubjectApiTest extends ApiTestCase
         $teacher = TeacherFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->patch('/api/subjects/' . $subject->getId(), [
                 'json' => [
                     'name' => 'chemistry',
@@ -159,6 +169,7 @@ class SubjectApiTest extends ApiTestCase
         $subject2 = SubjectFactory::createOne(['teacher' => $teacher]);
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->patch('/api/subjects/' . $subject1->getId(), [
                 'json' => [
                     'name' => $subject2->getName(),
@@ -174,6 +185,7 @@ class SubjectApiTest extends ApiTestCase
         $teacher = TeacherFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->patch('/api/subjects/' . $subject->getId(), [
                 'json' => [
                     'teacher' => '/api/teachers/' . $teacher->getId(),
@@ -193,6 +205,7 @@ class SubjectApiTest extends ApiTestCase
         $schoolClass = SchoolClassFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects/classes/add', [
                 'json' => [
                     'subjectId' => $subject->getId(),
@@ -216,6 +229,7 @@ class SubjectApiTest extends ApiTestCase
         $schoolClass->save();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects/classes/add', [
                 'json' => [
                     'subjectId' => $subject2->getId(),
@@ -231,6 +245,7 @@ class SubjectApiTest extends ApiTestCase
         $subject = SubjectFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects/classes/add', [
                 'json' => [
                     'subjectId' => $subject->getId(),
@@ -245,6 +260,7 @@ class SubjectApiTest extends ApiTestCase
         $schoolClass = SchoolClassFactory::createOne();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects/classes/add', [
                 'json' => [
                     'subjectId' => 43,
@@ -257,6 +273,7 @@ class SubjectApiTest extends ApiTestCase
     public function post_to_add_school_class_with_blank_data()
     {
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->post('/api/subjects/classes/add', [
                 'json' => [
                 ]
@@ -270,6 +287,7 @@ class SubjectApiTest extends ApiTestCase
         $schoolClassName = $subject->getSchoolClasses()->getValues()[0]->getName();
 
         $this->browser()
+            ->actingAs(UserFactory::new()->asAdmin()->create())
             ->delete('/api/subjects/' . $subject->getId() . '/classes/' . $schoolClassName)
             ->assertStatus(204);
 

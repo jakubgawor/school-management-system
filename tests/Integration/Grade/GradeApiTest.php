@@ -90,11 +90,11 @@ class GradeApiTest extends ApiTestCase
     {
         $schoolClass = SchoolClassFactory::new(['name' => '9z'])->withStudents(1)->create()->object();
         $student = $schoolClass->getStudents()->getValues()[0];
+        $student->getUser()->setRoles(['ROLE_STUDENT']);
         $teacher = TeacherFactory::createOne();
         $subject = SubjectFactory::createOne(['name' => 'biology', 'teacher' => $teacher]);
         $subject->addSchoolClass($schoolClass);
         $subject->save();
-
 
         GradeFactory::createMany(2, [
             'grade' => '5.00',
@@ -104,6 +104,7 @@ class GradeApiTest extends ApiTestCase
         ]);
 
         $this->browser()
+            ->actingAs($student->getUser())
             ->get('/api/grades/students/' . $student->getId() . '/' . $subject->getName())
             ->assertStatus(200)
             ->use(function (Json $json) {
@@ -124,6 +125,7 @@ class GradeApiTest extends ApiTestCase
         $schoolClass = SchoolClassFactory::new(['name' => '9z'])->withStudents(1)->create()->object();
         $student = $schoolClass->getStudents()->getValues()[0];
         $teacher = TeacherFactory::createOne();
+        $teacher->getUser()->setRoles(['ROLE_TEACHER']);
         $subject = SubjectFactory::createOne(['name' => 'biology', 'teacher' => $teacher]);
         $subject->addSchoolClass($schoolClass);
         $subject->save();
@@ -139,6 +141,7 @@ class GradeApiTest extends ApiTestCase
         $this->assertSame(1, $gradeId);
 
         $this->browser()
+            ->actingAs($teacher->getUser())
             ->delete('/api/grade/' . $gradeId)
             ->assertStatus(204);
 
