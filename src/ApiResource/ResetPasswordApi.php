@@ -22,6 +22,7 @@ use App\State\ResetPassword\ResetPasswordStateProcessor;
             output: false,
         )
     ],
+    security: 'is_granted("PUBLIC_ACCESS")',
     provider: EntityToDtoStateProvider::class,
     processor: ResetPasswordStateProcessor::class
 )]
