@@ -22,13 +22,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
         new Get(),
         new GetCollection(),
         new Post(
-            processor: SubjectStateProcessor::class
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: SubjectStateProcessor::class,
         ),
-        new Delete(),
+        new Delete(
+            security: 'is_granted("ROLE_TEACHER")',
+        ),
         new Patch(
-            processor: SubjectStateProcessor::class
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: SubjectStateProcessor::class,
         ),
     ],
+    security: 'is_granted("ROLE_STUDENT")',
     provider: EntityToDtoStateProvider::class,
     processor: EntityClassDtoStateProcessor::class,
     stateOptions: new Options(Subject::class),
